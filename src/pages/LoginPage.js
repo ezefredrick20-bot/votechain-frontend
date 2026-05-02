@@ -7,22 +7,25 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
- const handleLogin = async () => {
+const handleLogin = async () => {
   if (!/^\d{11}$/.test(nin) || !/^\d{11}$/.test(phone)) {
     alert("Phone and NIN must be exactly 11 digits");
     return;
   }
 
-  setLoading(true); // ✅ START loading
+  setLoading(true);
 
   try {
-    const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ nin, phone }),
-    });
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/login`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nin, phone }),
+      }
+    );
 
     const data = await response.json();
 
@@ -30,6 +33,7 @@ export default function LoginPage() {
       alert(data.error);
     } else {
       localStorage.setItem("userNIN", data.user.nin);
+      alert("Login successful ✅");
       navigate("/home");
     }
 
@@ -38,7 +42,7 @@ export default function LoginPage() {
     alert("Login failed");
   }
 
-  setLoading(false); // ✅ STOP loading (very important)
+  setLoading(false);
 };
 
  return (
