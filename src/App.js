@@ -9,7 +9,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AboutPage from "./pages/AboutPage";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import VotingPage from "./pages/VotingPage";
@@ -35,14 +35,7 @@ useEffect(() => {
     <Route path="/transactions" element={<TransactionPage />} />
     <Route path="/admin-login" element={<AdminLoginPage />} />
     <Route path="*" element={<NotFoundPage />} />
-   <Route
-  path="/admin-dashboard"
-  element={
-    localStorage.getItem("admin") === "true"
-      ? <AdminDashboard />
-      : <Navigate to="/admin-login" />
-  }
-/>
+   <Route path="/admin-dashboard" element={<AdminDashboard />} />
     <Route path="/admin" element={<AdminPage />} />
     <Route
   path="/"
