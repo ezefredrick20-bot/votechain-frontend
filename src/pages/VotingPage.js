@@ -64,7 +64,7 @@ const connectWallet = async () => {
   <>
     <Navbar />
 
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
     <div className="max-w-6xl mx-auto">
 
       {/* 🔥 HEADER */}

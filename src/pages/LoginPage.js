@@ -46,7 +46,7 @@ const handleLogin = async () => {
 };
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 flex items-center justify-center p-6">
+  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center p-8">
     
     <div className="bg-white/5 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
       

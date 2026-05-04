@@ -2,8 +2,7 @@ import GlassCard from "../components/GlassCard";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 p-6">
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
       <h1 className="text-4xl text-white font-bold text-center mb-8">
         📘 About VoteChain
       </h1>

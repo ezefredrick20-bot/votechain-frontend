@@ -21,7 +21,7 @@ export default function HomePage() {
     <>
       <Navbar />
 
-      <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 text-white p-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
 
         {/* 🔥 HEADER */}
         <div className="text-center mb-10">
@@ -35,7 +35,7 @@ export default function HomePage() {
         </div>
 
         {/* 👤 USER INFO */}
-        <div className="bg-slate-800 p-4 rounded-xl max-w-md mx-auto mb-8 text-center">
+        <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl hover:scale-[1.01] transition">
           <p className="text-gray-400">Logged in as</p>
           <p className="text-green-400 break-all">
             {userNIN}

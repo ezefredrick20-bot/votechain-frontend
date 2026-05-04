@@ -78,7 +78,7 @@ export default function ReviewVotePage() {
  return (
    <>
           <Navbar />
-  <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 flex items-center justify-center p-6">
+  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center p-8">
     
     {/* SUCCESS SCREEN */}
     {success ? (

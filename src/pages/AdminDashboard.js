@@ -10,28 +10,81 @@ import {
   Pie,
   Cell,
 } from "recharts";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
 
+
 export default function AdminDashboard() {
+  const API = process.env.REACT_APP_API_URL;
+   const [users, setUsers] = useState([]);
+   const [loadingUsers, setLoadingUsers] = useState(true);
   const [voters, setVoters] = useState([]);
   const [results, setResults] = useState({});
   const [isOpen, setIsOpen] = useState(true);
  const navigate = useNavigate();
 
-const fetchVoters = async () => {
-  const res = await fetch("https://votechain-backend-8m7f.onrender.com/voters");
-  const data = await res.json();
-  setVoters(data);
+const fetchUsers = useCallback(async () => {
+  setLoadingUsers(true);
+
+  try {
+    const res = await fetch(`${API}/users`);
+    if (!res.ok) throw new Error("Failed to fetch users");
+
+    const data = await res.json();
+    setUsers(data);
+  } catch (err) {
+    console.error("Users error:", err);
+  } finally {
+    setLoadingUsers(false);
+  }
+}, [API]);
+
+  useEffect(() => {
+  fetchUsers();
+}, [fetchUsers]);
+
+  const deleteUser = async (id) => {
+  const confirmDelete = window.confirm("Delete this user?");
+  if (!confirmDelete) return;
+
+  try {
+    const res = await fetch(`${API}/users/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("Delete failed");
+
+    fetchUsers(); // refresh
+  } catch (err) {
+    console.error("Delete error:", err);
+  }
 };
 
+const fetchVoters = useCallback(async () => {
+  try {
+    const res = await fetch(`${API}/voters`);
+    if (!res.ok) throw new Error("Failed to fetch voters");
+
+    const data = await res.json();
+    setVoters(data);
+  } catch (err) {
+    console.error("Voters error:", err);
+  }
+}, [API]);
+
   // 🔍 Fetch results
-  const fetchResults = async () => {
-    const res = await fetch("https://votechain-backend-8m7f.onrender.com/results");
+ const fetchResults = useCallback(async () => {
+  try {
+    const res = await fetch(`${API}/results`);
+    if (!res.ok) throw new Error("Failed to fetch results");
+
     const data = await res.json();
     setResults(data);
-  };
+  } catch (err) {
+    console.error("Results error:", err);
+  }
+}, [API]);
 
   
 useEffect(() => {
@@ -39,46 +92,54 @@ useEffect(() => {
 
   if (!isAdmin) {
     navigate("/admin-login");
+    return;
   }
-},);
 
- useEffect(() => {
-  fetchResults();
+  fetchUsers();
   fetchVoters();
+  fetchResults();
 
-  
   const savedStatus = localStorage.getItem("electionOpen");
   if (savedStatus !== null) {
     setIsOpen(savedStatus === "true");
   }
-}, []);
+}, [navigate, fetchUsers, fetchVoters, fetchResults]);
 
 const toggleElection = async () => {
-  const res = await fetch("https://votechain-backend-8m7f.onrender.com/toggle-election", {
-    method: "POST",
-  });
+  try {
+    const res = await fetch(`${API}/toggle-election`, {
+      method: "POST",
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  alert(data.message);
+    setIsOpen(data.status);
+    localStorage.setItem("electionOpen", data.status);
 
-  setIsOpen(data.status);
-
-  localStorage.setItem("electionOpen", data.status);
+    alert(data.message);
+  } catch (err) {
+    console.error(err);
+  }
 };
 
   // 🧹 Reset election
-  const resetVotes = async () => {
-    const confirmReset = window.confirm("Are you sure?");
-    if (!confirmReset) return;
+ const resetVotes = async () => {
+  const confirmReset = window.confirm("Are you sure?");
+  if (!confirmReset) return;
 
-    await fetch("https://votechain-backend-8m7f.onrender.com/reset-votes", {
+  try {
+    await fetch(`${API}/reset-votes`, {
       method: "DELETE",
     });
 
-    alert("Votes cleared!");
     fetchResults();
-  };
+    fetchVoters();
+
+    alert("Votes cleared!");
+  } catch (err) {
+    console.error(err);
+  }
+};
 
   const chartData = Object.keys(results).map((key) => ({
   name: key,
@@ -88,78 +149,121 @@ const toggleElection = async () => {
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-black via-slate-900 to-green-900 text-white p-6">
+  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
 
-    <h1 className="text-4xl font-bold mb-8 text-center">
-      🛠️ Admin Dashboard
-    </h1>
+    {/* 🔝 HEADER */}
+    <div className="flex justify-between items-center mb-10">
+      <div>
+        <h1 className="text-4xl font-bold tracking-tight">
+          VoteChain Admin
+        </h1>
+        <p className="text-gray-400 text-sm">
+          Real-time election monitoring dashboard
+        </p>
+      </div>
 
-    {/* STATUS */}
-    <div className="flex justify-center mb-6">
+      <button
+        onClick={() => {
+          localStorage.removeItem("admin");
+          navigate("/admin-login");
+        }}
+        className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition"
+      >
+        Logout
+      </button>
+    </div>
+
+    {/* 🟢 STATUS */}
+    <div className="flex justify-center mb-8">
       <span
-        className={`px-6 py-2 rounded-full font-bold ${
-          isOpen ? "bg-green-600" : "bg-red-600"
+        className={`px-6 py-2 rounded-full font-semibold ${
+          isOpen ? "bg-green-600/80" : "bg-red-600/80"
         }`}
       >
         {isOpen ? "🟢 Election OPEN" : "🔴 Election CLOSED"}
       </span>
     </div>
 
-    {/* ACTION BUTTONS */}
+    {/* 🎛️ ACTIONS */}
     <div className="flex justify-center gap-4 mb-10">
       <button
         onClick={toggleElection}
-        className="bg-yellow-600 px-4 py-2 rounded"
+        className="bg-yellow-500/90 hover:bg-yellow-500 px-5 py-2 rounded-xl font-semibold transition"
       >
         {isOpen ? "Close Election" : "Open Election"}
       </button>
 
       <button
         onClick={resetVotes}
-        className="bg-red-600 px-4 py-2 rounded"
+        className="bg-red-500/90 hover:bg-red-500 px-5 py-2 rounded-xl font-semibold transition"
       >
         Reset Election
       </button>
     </div>
 
-    <button
-  onClick={() => {
-    localStorage.removeItem("admin");
-    window.location.href = "/admin-login";
-  }}
-  className="bg-gray-600 mt-4 px-4 py-2 rounded"
->
-  Logout
-</button>
+    {/* 📊 SUMMARY */}
+    <div className="grid md:grid-cols-3 gap-6 mb-10">
+      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+        <p className="text-gray-400 text-sm">Total Users</p>
+        <h2 className="text-3xl font-bold mt-2">{users.length}</h2>
+      </div>
 
-    {/* RESULTS */}
-    <div className="bg-slate-800 p-6 rounded-xl shadow-lg shadow-green-500/20 mb-8">
-      <h2 className="text-2xl mb-4">📊 Results</h2>
+      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+        <p className="text-gray-400 text-sm">Total Votes</p>
+        <h2 className="text-3xl font-bold mt-2">{voters.length}</h2>
+      </div>
+
+      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+        <p className="text-gray-400 text-sm">Candidates</p>
+        <h2 className="text-3xl font-bold mt-2">
+          {Object.keys(results).length}
+        </h2>
+      </div>
+    </div>
+
+    {/* 📊 RESULTS (POLISHED) */}
+    <div className="bg-white/5 p-6 rounded-2xl border border-green-500/20 shadow-lg shadow-green-500/10 mb-8">
+      <h2 className="text-2xl mb-4">📊 Election Results</h2>
 
       {Object.keys(results).length === 0 ? (
-        <Loader />
+        <div className="text-center text-gray-400 py-6">
+          No votes recorded yet
+        </div>
       ) : (
-        Object.keys(results).map((candidate) => (
-          <div
-            key={candidate}
-            className="flex justify-between border-b border-gray-700 py-2"
-          >
-            <span>{candidate}</span>
-            <span className="text-green-400">
-              {results[candidate]} votes
-            </span>
-          </div>
-        ))
+        Object.keys(results).map((candidate) => {
+          const votes = results[candidate];
+          const totalVotes = voters.length;
+          const percentage = totalVotes
+            ? ((votes / totalVotes) * 100).toFixed(1)
+            : 0;
+
+          return (
+            <div key={candidate} className="mb-4">
+              <div className="flex justify-between mb-1">
+                <span>{candidate}</span>
+                <span>
+                  {votes} votes ({percentage}%)
+                </span>
+              </div>
+
+              <div className="w-full bg-gray-700 h-2 rounded">
+                <div
+                  className="bg-green-500 h-2 rounded"
+                  style={{ width: `${percentage}%` }}
+                ></div>
+              </div>
+            </div>
+          );
+        })
       )}
-    </div> {/* ✅ CLOSE RESULTS PROPERLY */}
+    </div>
 
-    {/* CHARTS */}
-    <div className="grid md:grid-cols-2 gap-6 mt-8 mb-8">
+    {/* 📊 CHARTS */}
+    <div className="grid md:grid-cols-2 gap-6 mb-8">
 
-      {/* BAR CHART */}
-      <div className="bg-slate-800 p-6 rounded-xl shadow-lg shadow-green-500/20">
+      {/* BAR */}
+      <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
         <h2 className="text-xl mb-4">Bar Chart</h2>
-
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData}>
@@ -177,10 +281,9 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
         </div>
       </div>
 
-      {/* PIE CHART */}
-      <div className="bg-slate-800 p-6 rounded-xl shadow-lg shadow-green-500/20">
+      {/* PIE */}
+      <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
         <h2 className="text-xl mb-4">Vote Distribution</h2>
-
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -195,7 +298,6 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
                   <Cell key={index} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-
               <Tooltip />
             </PieChart>
           </ResponsiveContainer>
@@ -204,23 +306,69 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
     </div>
 
-    {/* VOTERS */}
-    <div className="bg-slate-800 p-6 rounded-xl shadow-lg shadow-green-500/20">
+    {/* 👥 VOTERS */}
+    <div className="bg-white/5 p-6 rounded-2xl border border-white/10 mb-8">
       <h2 className="text-2xl mb-4">👥 Voters</h2>
 
-      {[...voters].reverse().map((v, index) => (
-        <div
-          key={index}
-          className="flex justify-between border-b border-gray-700 py-2"
-        >
-          <span>
-            {v.nin.slice(0, 4)}****{v.nin.slice(-3)}
-          </span>
-          <span>{v.candidate}</span>
+      {voters.length === 0 ? (
+        <div className="text-center text-gray-400 py-6">
+          No votes yet
         </div>
-      ))}
+      ) : (
+        [...voters].reverse().map((v, index) => (
+          <div
+            key={index}
+            className="flex justify-between p-3 rounded-xl bg-white/5 border border-white/10 mb-2"
+          >
+            <span>
+              {v.nin.slice(0, 4)}****{v.nin.slice(-3)}
+            </span>
+            <span>{v.candidate}</span>
+          </div>
+        ))
+      )}
     </div>
 
-  </div>
-);
-}
+    {/* 👤 USERS */}
+<div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+  <h2 className="text-2xl mb-4">
+    👤 Registered Users ({users.length})
+  </h2>
+
+  {loadingUsers ? (
+    <Loader />
+  ) : users.length === 0 ? (
+    <div className="text-center text-gray-400 py-6">
+      No users registered yet
+    </div>
+  ) : (
+    users.map((user) => (
+      <div
+        key={user._id || user.id}
+        className="flex justify-between items-center p-4 rounded-xl bg-white/5 border border-white/10 mb-3 hover:bg-white/10 transition"
+      >
+        <div>
+          <p className="font-semibold">
+            {user.firstName} {user.lastName}
+          </p>
+          <p className="text-sm text-gray-400">
+            {user.phone}
+          </p>
+          <p className="text-sm text-gray-400">
+            {user.nin}
+          </p>
+        </div>
+
+        <button
+          onClick={() => deleteUser(user._id || user.id)}
+          className="bg-red-500/90 hover:bg-red-500 px-4 py-1 rounded-xl transition"
+        >
+          Delete
+        </button>
+      </div>
+    ))
+  )}
+</div>
+
+</div>
+)};

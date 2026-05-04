@@ -4,7 +4,7 @@ export default function TransactionPage() {
   const txHash = localStorage.getItem("lastTransactionHash");
 
   return (
-    <div className="min-h-screen bg-slate-900 p-6">
+    <div className="min-h-screen bg-slate-900 p-8">
       <h1 className="text-3xl text-white font-bold text-center mb-8">
         Blockchain Transaction Viewer
       </h1>
@@ -19,7 +19,7 @@ export default function TransactionPage() {
             {txHash || "No transaction found"}
           </p>
 
-          <div className="bg-slate-800 p-4 rounded-xl">
+          <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl hover:scale-[1.01] transition">
             <p className="text-gray-400 text-sm">Status:</p>
             <p className="text-green-500 font-bold">
               Confirmed ✅
