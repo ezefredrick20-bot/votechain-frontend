@@ -1,80 +1,85 @@
+import Navbar from "../components/Navbar";
+import TopBar from "../components/TopBar";
 import GlassCard from "../components/GlassCard";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
-      <h1 className="text-4xl text-white font-bold text-center mb-8">
-        📘 About VoteChain
-      </h1>
+    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-800">
 
-      <div className="max-w-5xl mx-auto space-y-6">
+      {/* 🔝 INEC STYLE TOP BAR */}
+      <TopBar />
 
-        {/* PROJECT OVERVIEW */}
-        <GlassCard>
-          <h2 className="text-2xl text-green-400 mb-3 font-semibold">
-            Project Overview
-          </h2>
-          <p className="text-gray-300">
-            VoteChain is a decentralized and transparent electoral framework
-            designed to improve the integrity of voting systems using blockchain
-            principles. It eliminates fraud, ensures accountability, and enhances
-            trust in the electoral process.
+      {/* 🧭 NAVBAR */}
+      <Navbar />
+
+      <div className="px-4 md:px-10 py-10 flex-1">
+
+        {/* HEADER */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl md:text-4xl font-bold text-green-700">
+            About VoteChain
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Secure, Transparent and Modern Digital Voting System
           </p>
-        </GlassCard>
+        </div>
 
-        {/* OBJECTIVES */}
-        <GlassCard>
-          <h2 className="text-2xl text-green-400 mb-3 font-semibold">
-            Objectives
-          </h2>
-          <ul className="text-gray-300 list-disc pl-6 space-y-2">
-            <li>Ensure secure and tamper-proof voting</li>
-            <li>Prevent multiple voting using unique NIN</li>
-            <li>Provide transparency through public result viewing</li>
-            <li>Enable decentralized participation via wallet verification</li>
-          </ul>
-        </GlassCard>
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-6">
 
-        {/* FEATURES */}
-        <GlassCard>
-          <h2 className="text-2xl text-green-400 mb-3 font-semibold">
-            Key Features
-          </h2>
-          <ul className="text-gray-300 list-disc pl-6 space-y-2">
-            <li>🔐 MetaMask wallet authentication</li>
-            <li>🧾 Digital vote signature</li>
-            <li>🗳️ One-person-one-vote system</li>
-            <li>📊 Real-time election results</li>
-            <li>🛠️ Admin control panel</li>
-          </ul>
-        </GlassCard>
+          <GlassCard>
+            <h2 className="text-xl font-semibold text-green-600 mb-2">
+              Project Overview
+            </h2>
+            <p>
+              VoteChain is a blockchain-powered e-voting system designed to solve
+              major electoral problems in Nigeria such as vote rigging, result
+              manipulation, and lack of transparency. It ensures secure and
+              verifiable voting for all citizens.
+            </p>
+          </GlassCard>
 
-        {/* TECHNOLOGY */}
-        <GlassCard>
-          <h2 className="text-2xl text-green-400 mb-3 font-semibold">
-            Technologies Used
-          </h2>
-          <ul className="text-gray-300 list-disc pl-6 space-y-2">
-            <li>Frontend: React.js</li>
-            <li>Backend: Node.js with Express</li>
-            <li>Database: MongoDB</li>
-            <li>Blockchain Interaction: MetaMask (Web3)</li>
-          </ul>
-        </GlassCard>
+          <GlassCard>
+            <h2 className="text-xl font-semibold text-green-600 mb-2">
+              Objectives
+            </h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Ensure tamper-proof voting</li>
+              <li>Prevent multiple voting using NIN</li>
+              <li>Provide real-time election results</li>
+              <li>Increase trust in elections</li>
+            </ul>
+          </GlassCard>
 
-        {/* TRANSPARENCY */}
-        <GlassCard>
-          <h2 className="text-2xl text-green-400 mb-3 font-semibold">
-            Transparency & Security
-          </h2>
-          <p className="text-gray-300">
-            The system ensures transparency by allowing users to view election
-            results while maintaining strict security controls to prevent
-            unauthorized access or manipulation. Each vote is verified and
-            recorded securely.
-          </p>
-        </GlassCard>
+          <GlassCard>
+            <h2 className="text-xl font-semibold text-green-600 mb-2">
+              Key Features
+            </h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>Wallet-based authentication</li>
+              <li>One-person-one-vote enforcement</li>
+              <li>Live result tracking</li>
+              <li>Blockchain vote verification</li>
+            </ul>
+          </GlassCard>
 
+          <GlassCard>
+            <h2 className="text-xl font-semibold text-green-600 mb-2">
+              Technologies
+            </h2>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>React.js</li>
+              <li>Node.js (Express)</li>
+              <li>MongoDB</li>
+              <li>Web3 + MetaMask</li>
+            </ul>
+          </GlassCard>
+
+        </div>
+      </div>
+
+      {/* FOOTER */}
+      <div className="bg-green-700 text-white text-center py-3 text-sm">
+        © 2026 VoteChain — Powered for Secure Elections
       </div>
     </div>
   );

@@ -28,13 +28,22 @@ const fetchUsers = useCallback(async () => {
   setLoadingUsers(true);
 
   try {
-    const res = await fetch(`${API}/users`);
+    const token = localStorage.getItem("adminToken");
+
+    const res = await fetch(`${API}/users`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!res.ok) throw new Error("Failed to fetch users");
 
     const data = await res.json();
     setUsers(data);
+
   } catch (err) {
     console.error("Users error:", err);
+
   } finally {
     setLoadingUsers(false);
   }
@@ -44,18 +53,25 @@ const fetchUsers = useCallback(async () => {
   fetchUsers();
 }, [fetchUsers]);
 
-  const deleteUser = async (id) => {
+ const deleteUser = async (id) => {
   const confirmDelete = window.confirm("Delete this user?");
+
   if (!confirmDelete) return;
 
   try {
+    const token = localStorage.getItem("adminToken");
+
     const res = await fetch(`${API}/users/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res.ok) throw new Error("Delete failed");
 
-    fetchUsers(); // refresh
+    fetchUsers();
+
   } catch (err) {
     console.error("Delete error:", err);
   }
@@ -63,11 +79,19 @@ const fetchUsers = useCallback(async () => {
 
 const fetchVoters = useCallback(async () => {
   try {
-    const res = await fetch(`${API}/voters`);
+    const token = localStorage.getItem("adminToken");
+
+    const res = await fetch(`${API}/voters`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!res.ok) throw new Error("Failed to fetch voters");
 
     const data = await res.json();
     setVoters(data);
+
   } catch (err) {
     console.error("Voters error:", err);
   }
@@ -76,11 +100,19 @@ const fetchVoters = useCallback(async () => {
   // 🔍 Fetch results
  const fetchResults = useCallback(async () => {
   try {
-    const res = await fetch(`${API}/results`);
+    const token = localStorage.getItem("adminToken");
+
+    const res = await fetch(`${API}/results`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
     if (!res.ok) throw new Error("Failed to fetch results");
 
     const data = await res.json();
     setResults(data);
+
   } catch (err) {
     console.error("Results error:", err);
   }
@@ -88,12 +120,12 @@ const fetchVoters = useCallback(async () => {
 
   
 useEffect(() => {
-  const isAdmin = localStorage.getItem("admin");
+  const token = localStorage.getItem("adminToken");
 
-  if (!isAdmin) {
-    navigate("/admin-login");
-    return;
-  }
+if (!token) {
+  navigate("/admin-login");
+  return;
+}
 
   fetchUsers();
   fetchVoters();
@@ -107,16 +139,23 @@ useEffect(() => {
 
 const toggleElection = async () => {
   try {
+    const token = localStorage.getItem("adminToken");
+
     const res = await fetch(`${API}/toggle-election`, {
       method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     const data = await res.json();
 
     setIsOpen(data.status);
+
     localStorage.setItem("electionOpen", data.status);
 
     alert(data.message);
+
   } catch (err) {
     console.error(err);
   }
@@ -125,17 +164,24 @@ const toggleElection = async () => {
   // 🧹 Reset election
  const resetVotes = async () => {
   const confirmReset = window.confirm("Are you sure?");
+
   if (!confirmReset) return;
 
   try {
+    const token = localStorage.getItem("adminToken");
+
     await fetch(`${API}/reset-votes`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     fetchResults();
     fetchVoters();
 
     alert("Votes cleared!");
+
   } catch (err) {
     console.error(err);
   }
@@ -149,8 +195,7 @@ const toggleElection = async () => {
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
  return (
-  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
-
+<div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white px-4 md:px-8 py-6">
     {/* 🔝 HEADER */}
     <div className="flex justify-between items-center mb-10">
       <div>
@@ -164,7 +209,7 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
       <button
         onClick={() => {
-          localStorage.removeItem("admin");
+          localStorage.removeItem("adminToken");
           navigate("/admin-login");
         }}
         className="bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition"

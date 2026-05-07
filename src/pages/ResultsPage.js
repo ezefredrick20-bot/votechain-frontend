@@ -1,85 +1,51 @@
 import { useEffect, useState } from "react";
-import GlassCard from "../components/GlassCard";
-import Navbar from "../components/Navbar";
+import PageWrapper from "../components/PageWrapper";
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid
 } from "recharts";
 
 export default function ResultsPage() {
   const [data, setData] = useState([]);
 
-  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/results`)
+      .then(res => res.json())
+      .then(votes => {
+        const formatted = Object.keys(votes).map(name => ({
+          name,
+          votes: votes[name],
+        }));
+        setData(formatted);
+      });
+  }, []);
 
-useEffect(() => {
-  fetch("https://votechain-backend-8m7f.onrender.com/results")
-    .then((res) => res.json())
-    .then((votes) => {
-      const formatted = Object.keys(votes).map((name) => ({
-        name,
-        votes: votes[name],
-      }));
-      setData(formatted);
-      setLoading(false); // ✅ stop loading
-    });
-}, []);
-
-if (loading) {
-  return (
-    <div className="text-white text-center mt-20 text-xl">
-      Loading results...
-    </div>
-  );
-}
-
-  const totalVotes = data.reduce(
-  (sum, item) => sum + item.votes,
-  0
-);
+  const totalVotes = data.reduce((sum, d) => sum + d.votes, 0);
 
   return (
-     <>
-            <Navbar />
-    <div className="flex justify-center items-center min-h-screen p-6">
-      <GlassCard>
-        <h1 className="text-3xl text-white font-bold mb-6 text-center">
-          Live Election Results
-        </h1>
+    <PageWrapper>
 
-        <p className="text-white text-center mb-4">
-          Total Votes: {totalVotes}
-        </p>
+      <h1 className="text-3xl font-bold text-center mb-6">
+        📊 Live Election Results
+      </h1>
 
-        <div className="w-[500px] h-[350px]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data} barSize={40}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" stroke="#ffffff" />
-              <YAxis stroke="#ffffff" />
+      <p className="text-center text-gray-400 mb-6">
+        Total Votes: {totalVotes}
+      </p>
+
+      <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+        <div className="w-full h-96">
+          <ResponsiveContainer>
+            <BarChart data={data}>
+              <CartesianGrid stroke="#444" />
+              <XAxis dataKey="name" stroke="#fff" />
+              <YAxis stroke="#fff" />
               <Tooltip />
-              <Bar dataKey="votes" fill="#22c55e" animationDuration={2000} />
+              <Bar dataKey="votes" fill="#22c55e" />
             </BarChart>
           </ResponsiveContainer>
         </div>
+      </div>
 
-        <div className="text-center mt-4">
-          <button
-            onClick={() => {
-              localStorage.removeItem("votes");
-              window.location.reload();
-            }}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
-          >
-            Reset Demo Votes
-          </button>
-        </div>
-      </GlassCard>
-    </div>
-    </>
+    </PageWrapper>
   );
 }

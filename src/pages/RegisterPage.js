@@ -16,134 +16,80 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+    setForm({...form, [e.target.name]: e.target.value});
   };
 
   const handleRegister = async () => {
-  const { firstName, lastName, phone, nin, dob } = form;
+    const { firstName, lastName, phone, nin, dob } = form;
 
-  if (!firstName || !lastName || !phone || !nin || !dob) {
-    alert("Please fill all required fields");
-    return;
-  }
-
-  if (!/^\d{11}$/.test(phone) || !/^\d{11}$/.test(nin)) {
-    alert("Phone and NIN must be 11 digits");
-    return;
-  }
-
-  setLoading(true); // ✅ START loading
-
-  try {
-    const response = await fetch("https://votechain-backend-8m7f.onrender.com/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(form),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.error);
-    } else {
-      alert("Registration successful ✅");
-      navigate("/login");
+    if (!firstName || !lastName || !phone || !nin || !dob) {
+      alert("Fill all required fields");
+      return;
     }
 
-  } catch (error) {
-    console.error(error);
-    alert("Registration failed");
-  }
+    setLoading(true);
 
-  setLoading(false); // ✅ STOP loading
-};
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error);
+      } else {
+        alert("Registration successful");
+        navigate("/login");
+      }
+
+    } catch {
+      alert("Registration failed");
+    }
+
+    setLoading(false);
+  };
 
   return (
-  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black flex items-center justify-center p-8">
-    
-    <div className="bg-white/5 backdrop-blur-lg p-8 rounded-2xl shadow-xl border border-white/10 w-full max-w-md">
-      
-      {/* 🏛️ TITLE */}
-      <h1 className="text-3xl font-bold text-white text-center mb-2">
-        E-Voting System
-      </h1>
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white px-4">
 
-      <p className="text-gray-400 text-center mb-6">
-        Create Your Account
-      </p>
+      <div className="w-full max-w-lg bg-white/5 border border-white/10 p-8 rounded-2xl">
 
-      <div className="space-y-4">
+        <h1 className="text-3xl font-bold text-center mb-6">
+          🏛️ Voter Registration
+        </h1>
 
-        <input
-          name="firstName"
-          placeholder="First Name"
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
+        <div className="grid grid-cols-2 gap-4">
 
-        <input
-          name="middleName"
-          placeholder="Middle Name (Optional)"
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
+          <input name="firstName" placeholder="First Name" onChange={handleChange} className="input" />
+          <input name="lastName" placeholder="Last Name" onChange={handleChange} className="input" />
 
-        <input
-          name="lastName"
-          placeholder="Last Name"
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
+          <input name="middleName" placeholder="Middle Name" onChange={handleChange} className="input col-span-2" />
 
-        <input
-          name="phone"
-          placeholder="Phone Number (11 digits)"
-          maxLength={11}
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
+          <input name="phone" placeholder="Phone" onChange={handleChange} className="input" />
+          <input name="nin" placeholder="NIN" onChange={handleChange} className="input" />
 
-        <input
-          name="nin"
-          placeholder="NIN (11 digits)"
-          maxLength={11}
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
-
-        <input
-          name="dob"
-          type="date"
-          onChange={handleChange}
-          className="w-full p-3 rounded-xl bg-slate-800 text-white"
-        />
+          <input type="date" name="dob" onChange={handleChange} className="input col-span-2" />
+        </div>
 
         <button
           onClick={handleRegister}
           disabled={loading}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-semibold"
+          className="w-full mt-6 bg-green-600 hover:bg-green-700 py-3 rounded-xl"
         >
           {loading ? "Registering..." : "Register"}
         </button>
+
+        <p className="text-center text-gray-400 mt-4">
+          Already registered?{" "}
+          <span onClick={() => navigate("/login")} className="text-green-400 cursor-pointer">
+            Login
+          </span>
+        </p>
+
       </div>
-
-      {/* 🔗 LOGIN LINK */}
-      <p className="text-gray-400 text-center mt-6">
-        Already have an account?{" "}
-        <span
-          onClick={() => navigate("/login")}
-          className="text-green-400 cursor-pointer hover:underline"
-        >
-          Login here
-        </span>
-      </p>
-
     </div>
-  </div>
-);
+  );
 }

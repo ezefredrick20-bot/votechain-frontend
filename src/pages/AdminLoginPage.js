@@ -8,27 +8,27 @@ export default function AdminLoginPage() {
 
   const handleAdminLogin = async () => {
   try {
-    const res = await fetch("https://votechain-backend-8m7f.onrender.com/admin-login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+    const res = await fetch(
+      "https://votechain-backend-8m7f.onrender.com/admin-login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      }
+    );
 
     const data = await res.json();
-
-    console.log("Response:", data); // 🔍 debug
 
     if (!res.ok) {
       alert(data.error);
     } else {
-      // ✅ SAVE ADMIN SESSION
-      localStorage.setItem("admin", "true");
+      // ✅ SAVE REAL TOKEN
+      localStorage.setItem("adminToken", data.token);
 
       alert("Admin login successful ✅");
 
-      // ✅ NAVIGATE TO DASHBOARD
       navigate("/admin-dashboard");
     }
 
@@ -37,7 +37,6 @@ export default function AdminLoginPage() {
     alert("Admin login failed");
   }
 };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-screen">
       <h2 className="text-white text-xl mb-4">Admin Login</h2>

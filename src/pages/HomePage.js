@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import PageWrapper from "../components/PageWrapper";
 
 export default function HomePage() {
   const navigate = useNavigate();
-
   const [isOpen, setIsOpen] = useState(true);
 
   const userNIN = localStorage.getItem("userNIN");
@@ -18,97 +17,130 @@ export default function HomePage() {
   }, []);
 
   return (
-    <>
-      <Navbar />
+    <PageWrapper>
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
+      {/* HEADER */}
+      <div className="text-center mb-10">
+        <h1 className="text-3xl md:text-4xl font-bold">
+          🏛️ VoteChain Dashboard
+        </h1>
 
-        {/* 🔥 HEADER */}
-        <div className="text-center mb-10">
-          <h1 className="text-4xl font-bold">
-            Welcome to VoteChain
-          </h1>
+        <p className="text-gray-400 mt-2">
+          Secure Digital Voting Portal
+        </p>
+      </div>
 
-          <p className="text-gray-400 mt-2">
-            Secure Blockchain-Based E-Voting System
+      {/* INFO CARDS */}
+      <div className="grid md:grid-cols-2 gap-6 mb-10">
+
+        {/* USER */}
+        <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+          <p className="text-gray-400 text-sm">
+            Logged in as
           </p>
-        </div>
 
-        {/* 👤 USER INFO */}
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl hover:scale-[1.01] transition">
-          <p className="text-gray-400">Logged in as</p>
-          <p className="text-green-400 break-all">
+          <p className="text-green-400 font-semibold mt-1 break-all">
             {userNIN}
           </p>
         </div>
 
-        {/* 🟢 ELECTION STATUS */}
-        <div className="text-center mb-8">
+        {/* STATUS */}
+        <div className="bg-white/5 p-5 rounded-2xl border border-white/10 flex items-center justify-center">
           <span
-            className={`px-6 py-2 rounded-full font-bold ${
+            className={`px-5 py-2 rounded-full text-sm font-semibold ${
               isOpen ? "bg-green-600" : "bg-red-600"
             }`}
           >
-            {isOpen ? "🟢 Election Open" : "🔴 Election Closed"}
+            {isOpen
+              ? "🟢 Election Open"
+              : "🔴 Election Closed"}
           </span>
         </div>
 
-        {/* 🚀 ACTION CARDS */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+      </div>
 
-          {/* 🗳️ VOTE */}
-          <div
-            onClick={() => navigate("/")}
-            className="bg-green-600 hover:bg-green-700 p-6 rounded-2xl cursor-pointer text-center transition transform hover:scale-105"
-          >
-            <h2 className="text-2xl font-bold mb-2">🗳️ Vote</h2>
-            <p>Cast your vote securely</p>
-          </div>
+      {/* ACTION GRID */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
 
-          {/* 📊 RESULTS */}
-          <div
-            onClick={() => navigate("/results")}
-            className="bg-blue-600 hover:bg-blue-700 p-6 rounded-2xl cursor-pointer text-center transition transform hover:scale-105"
-          >
-            <h2 className="text-2xl font-bold mb-2">📊 Results</h2>
-            <p>View live election results</p>
-          </div>
+        <ActionCard
+          title="🗳️ Vote"
+          desc="Cast your vote securely"
+          color="bg-green-600 hover:bg-green-700"
+          onClick={() => navigate("/")}
+        />
 
-          {/* ⛓️ BLOCKCHAIN */}
-          <div
-            onClick={() => navigate("/transactions")}
-            className="bg-purple-600 hover:bg-purple-700 p-6 rounded-2xl cursor-pointer text-center transition transform hover:scale-105"
-          >
-            <h2 className="text-2xl font-bold mb-2">⛓️ Blockchain</h2>
-            <p>View transaction history</p>
-          </div>
+        <ActionCard
+          title="📊 Results"
+          desc="View live results"
+          color="bg-blue-600 hover:bg-blue-700"
+          onClick={() => navigate("/results")}
+        />
 
-        </div>
-
-        <div
-  onClick={() => navigate("/about")}
-  className="bg-slate-700 hover:bg-slate-600 p-6 rounded-2xl cursor-pointer transition transform hover:scale-105"
->
-  <h2 className="text-xl font-bold text-white mb-2">📘 About</h2>
-  <p className="text-gray-300 text-sm">
-    Learn how the system works and its security features
-  </p>
-</div>
-
-        {/* 🚪 LOGOUT */}
-        <div className="text-center mt-12">
-          <button
-            onClick={() => {
-              localStorage.clear();
-              navigate("/login");
-            }}
-            className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl font-semibold"
-          >
-            Logout
-          </button>
-        </div>
+        <ActionCard
+          title="⛓️ Blockchain"
+          desc="View transactions"
+          color="bg-purple-600 hover:bg-purple-700"
+          onClick={() => navigate("/transactions")}
+        />
 
       </div>
-    </>
+
+      {/* ABOUT */}
+      <div
+        onClick={() => navigate("/about")}
+        className="bg-white/5 p-6 rounded-2xl border border-white/10 cursor-pointer hover:bg-white/10 transition"
+      >
+        <h2 className="font-bold mb-2">
+          📘 About VoteChain
+        </h2>
+
+        <p className="text-gray-400 text-sm">
+          Learn how blockchain ensures transparency
+          and security in elections.
+        </p>
+      </div>
+
+      {/* LOGOUT */}
+      <div className="text-center mt-10">
+        <button
+          onClick={() => {
+            localStorage.clear();
+            navigate("/login");
+          }}
+          className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-xl transition"
+        >
+          Logout
+        </button>
+      </div>
+
+      {/* ADMIN ACCESS */}
+      <div className="text-center mt-6">
+        <p
+          onClick={() => navigate("/admin-login")}
+          className="text-xs text-gray-500 cursor-pointer hover:text-gray-300 transition"
+        >
+          Admin Access
+        </p>
+      </div>
+
+    </PageWrapper>
+  );
+}
+
+/* 🔥 REUSABLE ACTION CARD */
+function ActionCard({ title, desc, color, onClick }) {
+  return (
+    <div
+      onClick={onClick}
+      className={`${color} p-6 rounded-2xl text-center cursor-pointer transition hover:scale-[1.03]`}
+    >
+      <h2 className="text-xl font-bold mb-2">
+        {title}
+      </h2>
+
+      <p className="text-sm">
+        {desc}
+      </p>
+    </div>
   );
 }

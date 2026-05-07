@@ -15,8 +15,8 @@ export default function AdminPage() {
   const votes = JSON.parse(localStorage.getItem("votes") || "{}");
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white p-8">
-      <h1 className="text-3xl text-white font-bold mb-6 text-center">
+<div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white px-4 md:px-8 py-6">   
+     <h1 className="text-3xl text-white font-bold mb-6 text-center">
         Admin Panel
       </h1>
 
