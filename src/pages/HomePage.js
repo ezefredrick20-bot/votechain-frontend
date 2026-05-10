@@ -4,12 +4,17 @@ import PageWrapper from "../components/PageWrapper";
 
 export default function HomePage() {
   const navigate = useNavigate();
+
   const [isOpen, setIsOpen] = useState(true);
 
   const userNIN = localStorage.getItem("userNIN");
 
+  const transactions =
+    JSON.parse(localStorage.getItem("transactions")) || [];
+
   useEffect(() => {
-    const savedStatus = localStorage.getItem("electionOpen");
+    const savedStatus =
+      localStorage.getItem("electionOpen");
 
     if (savedStatus !== null) {
       setIsOpen(savedStatus === "true");
@@ -30,8 +35,8 @@ export default function HomePage() {
         </p>
       </div>
 
-      {/* INFO CARDS */}
-      <div className="grid md:grid-cols-2 gap-6 mb-10">
+      {/* INFO SECTION */}
+      <div className="grid md:grid-cols-3 gap-6 mb-10">
 
         {/* USER */}
         <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
@@ -44,17 +49,30 @@ export default function HomePage() {
           </p>
         </div>
 
-        {/* STATUS */}
+        {/* ELECTION STATUS */}
         <div className="bg-white/5 p-5 rounded-2xl border border-white/10 flex items-center justify-center">
           <span
             className={`px-5 py-2 rounded-full text-sm font-semibold ${
-              isOpen ? "bg-green-600" : "bg-red-600"
+              isOpen
+                ? "bg-green-600"
+                : "bg-red-600"
             }`}
           >
             {isOpen
               ? "🟢 Election Open"
               : "🔴 Election Closed"}
           </span>
+        </div>
+
+        {/* TRANSACTION COUNT */}
+        <div className="bg-white/5 p-5 rounded-2xl border border-white/10 text-center">
+          <p className="text-gray-400 text-sm">
+            Transactions
+          </p>
+
+          <p className="text-purple-400 text-2xl font-bold mt-1">
+            {transactions.length}
+          </p>
         </div>
 
       </div>
@@ -71,17 +89,64 @@ export default function HomePage() {
 
         <ActionCard
           title="📊 Results"
-          desc="View live results"
+          desc="View live election results"
           color="bg-blue-600 hover:bg-blue-700"
           onClick={() => navigate("/results")}
         />
 
         <ActionCard
-          title="⛓️ Blockchain"
-          desc="View transactions"
+          title="⛓️ Transactions"
+          desc="Monitor blockchain activity"
           color="bg-purple-600 hover:bg-purple-700"
           onClick={() => navigate("/transactions")}
         />
+
+      </div>
+
+      {/* RECENT TRANSACTIONS */}
+      <div className="bg-white/5 p-6 rounded-2xl border border-white/10 mb-10">
+
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold">
+            ⛓️ Recent Transactions
+          </h2>
+
+          <button
+            onClick={() => navigate("/transactions")}
+            className="text-sm text-purple-400 hover:text-purple-300"
+          >
+            View All
+          </button>
+        </div>
+
+        {transactions.length === 0 ? (
+          <p className="text-gray-400">
+            No transactions available
+          </p>
+        ) : (
+          <div className="space-y-4">
+            {transactions.slice(0, 3).map((tx, index) => (
+              <div
+                key={index}
+                className="bg-black/20 p-4 rounded-xl border border-white/5"
+              >
+                <p className="text-green-400 break-all text-sm">
+                  {tx.hash}
+                </p>
+
+                <div className="flex justify-between mt-2 text-sm">
+                  <span className="text-white">
+                    {tx.candidate}
+                  </span>
+
+                  <span className="text-gray-400">
+                    {tx.timestamp}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
       </div>
 
@@ -95,8 +160,8 @@ export default function HomePage() {
         </h2>
 
         <p className="text-gray-400 text-sm">
-          Learn how blockchain ensures transparency
-          and security in elections.
+          Learn how blockchain-inspired
+          transparency improves election security.
         </p>
       </div>
 
@@ -127,8 +192,13 @@ export default function HomePage() {
   );
 }
 
-/* 🔥 REUSABLE ACTION CARD */
-function ActionCard({ title, desc, color, onClick }) {
+/* ACTION CARD */
+function ActionCard({
+  title,
+  desc,
+  color,
+  onClick,
+}) {
   return (
     <div
       onClick={onClick}
