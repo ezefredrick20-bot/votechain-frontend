@@ -2,7 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+/* GLOBAL BODY */
 body {
   background: linear-gradient(135deg, #0f172a, #1e293b);
   min-height: 100vh;
+  color: white;
+  font-family: sans-serif;
+}
+
+/* REUSABLE INPUT STYLE */
+.input {
+  @apply w-full bg-white/10 border border-white/20 text-white placeholder-gray-400 px-4 py-3 rounded-xl outline-none transition focus:ring-2 focus:ring-green-500 focus:border-green-500;
+}
+
+/* DATE INPUT FIX */
+input[type="date"] {
+  color-scheme: dark;
+}
+
+/* REUSABLE BUTTON */
+.primary-btn {
+  @apply w-full bg-green-600 hover:bg-green-700 py-3 rounded-xl font-semibold transition duration-300 disabled:opacity-50;
+}
+
+/* GLASS CARD EFFECT */
+.glass-card {
+  @apply bg-white/5 border border-white/10 backdrop-blur-lg rounded-2xl shadow-xl;
+}
+
+/* SMALL TEXT */
+.muted-text {
+  @apply text-gray-400 text-sm;
 }

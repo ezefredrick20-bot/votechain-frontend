@@ -15,81 +15,212 @@ export default function RegisterPage() {
 
   const [loading, setLoading] = useState(false);
 
+  /* HANDLE INPUT CHANGES */
   const handleChange = (e) => {
-    setForm({...form, [e.target.name]: e.target.value});
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   };
 
+  /* HANDLE REGISTRATION */
   const handleRegister = async () => {
     const { firstName, lastName, phone, nin, dob } = form;
 
+    /* VALIDATION */
     if (!firstName || !lastName || !phone || !nin || !dob) {
-      alert("Fill all required fields");
+      alert("Please fill all required fields");
+      return;
+    }
+
+    if (!/^\d{11}$/.test(phone)) {
+      alert("Phone number must be exactly 11 digits");
+      return;
+    }
+
+    if (!/^\d{11}$/.test(nin)) {
+      alert("NIN must be exactly 11 digits");
       return;
     }
 
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/register`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(form),
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(form),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error);
+        alert(data.error || "Registration failed");
       } else {
         alert("Registration successful");
+
         navigate("/login");
       }
 
-    } catch {
-      alert("Registration failed");
+    } catch (error) {
+      alert("Server error");
+      console.log(error);
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 py-10">
 
-      <div className="w-full max-w-lg bg-white/5 border border-white/10 p-8 rounded-2xl">
+      {/* CARD */}
+      <div className="w-full max-w-2xl glass-card p-8">
 
-        <h1 className="text-3xl font-bold text-center mb-6">
-          🏛️ Voter Registration
-        </h1>
+        {/* HEADER */}
+        <div className="text-center mb-8">
 
-        <div className="grid grid-cols-2 gap-4">
+          <h1 className="text-4xl font-bold mb-2">
+            🏛️ Voter Registration
+          </h1>
 
-          <input name="firstName" placeholder="First Name" onChange={handleChange} className="input" />
-          <input name="lastName" placeholder="Last Name" onChange={handleChange} className="input" />
+          <p className="text-gray-400">
+            Secure Blockchain-Based Electronic Voting System
+          </p>
 
-          <input name="middleName" placeholder="Middle Name" onChange={handleChange} className="input col-span-2" />
-
-          <input name="phone" placeholder="Phone" onChange={handleChange} className="input" />
-          <input name="nin" placeholder="NIN" onChange={handleChange} className="input" />
-
-          <input type="date" name="dob" onChange={handleChange} className="input col-span-2" />
         </div>
 
+        {/* FORM */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+          {/* FIRST NAME */}
+          <div>
+            <label className="block text-sm mb-2 text-gray-300">
+              First Name
+            </label>
+
+            <input
+              type="text"
+              name="firstName"
+              placeholder="Enter first name"
+              value={form.firstName}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+          {/* LAST NAME */}
+          <div>
+            <label className="block text-sm mb-2 text-gray-300">
+              Last Name
+            </label>
+
+            <input
+              type="text"
+              name="lastName"
+              placeholder="Enter last name"
+              value={form.lastName}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+          {/* MIDDLE NAME */}
+          <div className="md:col-span-2">
+            <label className="block text-sm mb-2 text-gray-300">
+              Middle Name
+            </label>
+
+            <input
+              type="text"
+              name="middleName"
+              placeholder="Enter middle name"
+              value={form.middleName}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+          {/* PHONE */}
+          <div>
+            <label className="block text-sm mb-2 text-gray-300">
+              Phone Number
+            </label>
+
+            <input
+              type="tel"
+              name="phone"
+              placeholder="08012345678"
+              maxLength={11}
+              value={form.phone}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+          {/* NIN */}
+          <div>
+            <label className="block text-sm mb-2 text-gray-300">
+              National Identification Number (NIN)
+            </label>
+
+            <input
+              type="text"
+              name="nin"
+              placeholder="Enter 11-digit NIN"
+              maxLength={11}
+              value={form.nin}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+          {/* DATE OF BIRTH */}
+          <div className="md:col-span-2">
+            <label className="block text-sm mb-2 text-gray-300">
+              Date of Birth
+            </label>
+
+            <input
+              type="date"
+              name="dob"
+              value={form.dob}
+              onChange={handleChange}
+              className="input"
+            />
+          </div>
+
+        </div>
+
+        {/* BUTTON */}
         <button
           onClick={handleRegister}
           disabled={loading}
-          className="w-full mt-6 bg-green-600 hover:bg-green-700 py-3 rounded-xl"
+          className="primary-btn mt-8"
         >
           {loading ? "Registering..." : "Register"}
         </button>
 
-        <p className="text-center text-gray-400 mt-4">
+        {/* LOGIN LINK */}
+        <p className="text-center text-gray-400 mt-6">
+
           Already registered?{" "}
-          <span onClick={() => navigate("/login")} className="text-green-400 cursor-pointer">
+
+          <span
+            onClick={() => navigate("/login")}
+            className="text-green-400 hover:text-green-300 cursor-pointer font-semibold transition"
+          >
             Login
           </span>
+
         </p>
 
       </div>
+
     </div>
   );
 }
