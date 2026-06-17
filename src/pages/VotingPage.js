@@ -10,13 +10,6 @@ export default function VotingPage() {
 
   const navigate = useNavigate();
 
-  // 🟢 Load election status
-  useEffect(() => {
-    const savedStatus = localStorage.getItem("electionOpen");
-    if (savedStatus !== null) {
-      setIsOpen(savedStatus === "true");
-    }
-  }, []);
 
   useEffect(() => {
     const fetchStatus = async () => {

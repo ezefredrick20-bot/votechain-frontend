@@ -119,23 +119,38 @@ const fetchVoters = useCallback(async () => {
 }, [API]);
 
   
+const fetchElectionStatus = useCallback(async () => {
+  try {
+    const res = await fetch(`${API}/election-status`);
+    const data = await res.json();
+
+    setIsOpen(data.isOpen);
+
+  } catch (err) {
+    console.error(err);
+  }
+}, [API]);
+
 useEffect(() => {
   const token = localStorage.getItem("adminToken");
 
-if (!token) {
-  navigate("/admin-login");
-  return;
-}
+  if (!token) {
+    navigate("/admin-login");
+    return;
+  }
 
   fetchUsers();
   fetchVoters();
   fetchResults();
+  fetchElectionStatus();
 
-  const savedStatus = localStorage.getItem("electionOpen");
-  if (savedStatus !== null) {
-    setIsOpen(savedStatus === "true");
-  }
-}, [navigate, fetchUsers, fetchVoters, fetchResults]);
+}, [
+  navigate,
+  fetchUsers,
+  fetchVoters,
+  fetchResults,
+  fetchElectionStatus
+]);
 
 const toggleElection = async () => {
   try {
