@@ -137,15 +137,7 @@ About
 
 
 <p>
-NIN:
-{
-userNIN
-?
-userNIN.slice(0,4)+"****"
-:
-"Guest"
-}
-
+NIN: {userNIN || "Guest"}
 </p>
 
 

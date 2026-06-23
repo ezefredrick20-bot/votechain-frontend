@@ -62,6 +62,26 @@ export default function ReviewVotePage() {
         return;
       }
 
+      const transaction = {
+  hash: "0x" + Math.random().toString(16).substring(2,12),
+  candidate: candidate.name,
+  timestamp: new Date().toISOString(),
+  status: "Confirmed"
+};
+
+
+const oldTransactions =
+JSON.parse(localStorage.getItem("transactions")) || [];
+
+
+localStorage.setItem(
+  "transactions",
+  JSON.stringify([
+    ...oldTransactions,
+    transaction
+  ])
+);
+
       setSuccess(true);
 
       setTimeout(() => {

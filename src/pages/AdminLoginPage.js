@@ -9,6 +9,13 @@ export default function AdminLoginPage() {
 
   const navigate = useNavigate();
 
+  <button
+onClick={()=>navigate("/home")}
+className="mt-4 text-green-500"
+>
+← Back to Homepage
+</button>
+
   /* ADMIN LOGIN */
   const handleAdminLogin = async () => {
 
