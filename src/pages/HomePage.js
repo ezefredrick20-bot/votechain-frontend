@@ -9,8 +9,33 @@ export default function HomePage() {
 
   const userNIN = localStorage.getItem("userNIN");
 
-  const transactions =
-    JSON.parse(localStorage.getItem("transactions")) || [];
+  const [transactions, setTransactions] = useState([]);
+
+useEffect(() => {
+
+const fetchTransactions = async()=>{
+
+try{
+
+const res = await fetch(
+`${process.env.REACT_APP_API_URL}/transactions`
+);
+
+const data = await res.json();
+
+setTransactions(data);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+};
+
+fetchTransactions();
+
+},[]);
 
   useEffect(() => {
     const savedStatus =

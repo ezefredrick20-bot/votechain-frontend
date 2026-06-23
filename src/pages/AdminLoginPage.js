@@ -9,13 +9,7 @@ export default function AdminLoginPage() {
 
   const navigate = useNavigate();
 
-  <button
-onClick={()=>navigate("/home")}
-className="mt-4 text-green-500"
->
-← Back to Homepage
-</button>
-
+ 
   /* ADMIN LOGIN */
   const handleAdminLogin = async () => {
 
@@ -81,6 +75,14 @@ className="mt-4 text-green-500"
           <h1 className="text-3xl font-bold mb-2">
             🔐 Admin Login
           </h1>
+
+ <button
+onClick={()=>navigate("/home")}
+className="mt-4 text-green-500"
+>
+← Back to Homepage
+</button>
+
 
           <p className="text-gray-400">
             Secure Administrative Access
