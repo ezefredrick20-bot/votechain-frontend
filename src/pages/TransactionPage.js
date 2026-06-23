@@ -1,9 +1,34 @@
 import GlassCard from "../components/GlassCard";
-
+import {useEffect,useState} from "react";
 export default function TransactionPage() {
 
-  const transactions =
-    JSON.parse(localStorage.getItem("transactions")) || [];
+const [transactions,setTransactions]=useState([]);
+
+useEffect(()=>{
+
+const fetchTransactions=async()=>{
+
+try{
+
+const res = await fetch(
+`${process.env.REACT_APP_API_URL}/transactions`
+);
+
+const data = await res.json();
+
+setTransactions(data);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+};
+
+fetchTransactions();
+
+},[]);
 
   return (
     <div className="min-h-screen bg-slate-900 p-8">

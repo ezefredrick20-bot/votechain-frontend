@@ -47,6 +47,14 @@ export default function ReviewVotePage() {
       });
 
       const data = await res.json();
+      localStorage.setItem(
+ "transaction",
+ JSON.stringify({
+   hash: "TX-" + Date.now(),
+   candidate: candidate.name,
+   time: new Date().toISOString()
+ })
+);
 
       if (!res.ok) {
         alert(data.error);
