@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ElectionBackground from "../components/ElectionBackground";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -75,9 +76,20 @@ export default function RegisterPage() {
     setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10">
 
+     return (
+    
+    <ElectionBackground>
+    
+    
+    <div className="
+    min-h-screen
+    flex
+    items-center
+    justify-center
+    text-white
+    px-4
+    ">
       {/* CARD */}
       <div className="w-full max-w-2xl glass-card p-8">
 
@@ -222,5 +234,8 @@ export default function RegisterPage() {
       </div>
 
     </div>
-  );
+
+</ElectionBackground>
+
+);
 }

@@ -1,6 +1,8 @@
-import GlassCard from "../components/GlassCard";
 import PageWrapper from "../components/PageWrapper";
+import ElectionBackground from "../components/ElectionBackground";
 import {ethers} from "ethers";
+import {connectWallet}
+from "../components/WalletConnect";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -22,171 +24,411 @@ export default function ReviewVotePage() {
   if (!candidate) return null;
 
   const handleConfirmVote = async () => {
-    setLoading(true);
 
-    try {
-      const wallet = localStorage.getItem("wallet");
+  setLoading(true);
 
-      if (!wallet) {
-        alert("Please connect wallet first");
-        setLoading(false);
-        return;
-      }
-
-      const provider = new ethers.BrowserProvider(
-window.ethereum
-);
+  try {
 
 
-const signer =
-await provider.getSigner();
+    await connectWallet();
+
+    const provider =
+      new ethers.BrowserProvider(
+        window.ethereum
+      );
 
 
-await signer.signMessage(
-`Vote for ${candidate.name}`
-);
+    const signer =
+      await provider.getSigner();
 
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/vote`, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({
-          candidate: candidate.name,
-          nin: userNIN,
+
+    await signer.signMessage(
+      `Vote for ${candidate.name}`
+    );
+
+
+    const res = await fetch(
+      `${process.env.REACT_APP_API_URL}/vote`,
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+
+          candidate:candidate.name,
+
+          nin:userNIN,
+
         }),
-      });
 
-      const data = await res.json();
-      localStorage.setItem(
- "transaction",
- JSON.stringify({
-   hash: "TX-" + Date.now(),
-   candidate: candidate.name,
-   time: new Date().toISOString()
- })
-);
-
-      if (!res.ok) {
-        alert(data.error);
-        setLoading(false);
-        return;
       }
-
-      const transaction = {
-  hash: "0x" + Math.random().toString(16).substring(2,12),
-  candidate: candidate.name,
-  timestamp: new Date().toISOString(),
-  status: "Confirmed"
-};
+    );
 
 
-const oldTransactions =
-JSON.parse(localStorage.getItem("transactions")) || [];
+    const data = await res.json();
 
 
-localStorage.setItem(
-  "transactions",
-  JSON.stringify([
-    ...oldTransactions,
-    transaction
-  ])
-);
 
-      setSuccess(true);
+    if(!res.ok){
 
-      setTimeout(() => {
-        navigate("/home");
-      }, 2500);
+      alert(data.error);
 
-    } catch (err) {
-      alert("Vote failed or rejected");
+      setLoading(false);
+
+      return;
+
     }
 
-    setLoading(false);
-  };
 
-  return (
-    <PageWrapper>
 
-      {success ? (
-        <div className="max-w-md mx-auto bg-green-900/40 border border-green-500 p-8 rounded-2xl text-center">
-          <h2 className="text-2xl font-bold text-green-400 mb-3">
-            ✅ Vote Successfully Cast
-          </h2>
+    const transaction = {
 
-          <p className="text-gray-300 text-sm">
-            Your vote has been securely recorded and cannot be altered.
-          </p>
 
-          <div className="mt-6 text-xs text-gray-400">
-            Transaction secured on blockchain
-          </div>
-        </div>
-      ) : (
+      hash:
+      "0x" +
+      Math.random()
+      .toString(16)
+      .substring(2,12),
 
-        <div className="max-w-xl mx-auto">
 
-          <GlassCard>
+      candidate:candidate.name,
 
-            {/* HEADER */}
-            <h1 className="text-2xl font-bold text-center mb-6">
-              🗳️ Confirm Your Vote
-            </h1>
 
-            {/* VOTER INFO */}
-            <div className="bg-slate-800 p-4 rounded-xl mb-5 text-sm">
-              <p className="text-gray-400">Voter ID (NIN)</p>
-              <p className="text-green-400 font-semibold">
-                {userNIN?.slice(0,4)}****{userNIN?.slice(-3)}
-              </p>
-            </div>
+      timestamp:
+      new Date().toISOString(),
 
-            {/* CANDIDATE */}
-            <img
-              src={candidate.image}
-              alt={candidate.name}
-              className="w-full h-56 object-cover rounded-xl mb-4"
-            />
 
-            <div className="flex items-center gap-3 mb-5">
-              <img
-                src={candidate.logo}
-                alt={candidate.party}
-                className="w-12 h-12 bg-white rounded-full p-1"
-              />
-              <div>
-                <h2 className="text-xl font-bold">{candidate.name}</h2>
-                <p className="text-gray-400 text-sm">{candidate.party}</p>
-              </div>
-            </div>
+      status:"Confirmed"
 
-            {/* WARNING */}
-            <div className="bg-yellow-900/30 border border-yellow-500 p-3 rounded-xl text-sm mb-6">
-              ⚠️ Once submitted, this vote cannot be changed.
-            </div>
+    };
 
-            {/* ACTIONS */}
-            <div className="flex gap-4">
-              <button
-                onClick={() => navigate("/")}
-                className="flex-1 bg-slate-700 hover:bg-slate-600 py-3 rounded-xl"
-              >
-                Go Back
-              </button>
 
-              <button
-                onClick={handleConfirmVote}
-                disabled={loading}
-                className="flex-1 bg-green-600 hover:bg-green-700 py-3 rounded-xl"
-              >
-                {loading ? "Submitting..." : "Confirm Vote"}
-              </button>
-            </div>
 
-          </GlassCard>
+    const oldTransactions =
+    JSON.parse(
+      localStorage.getItem("transactions")
+    ) || [];
 
-        </div>
-      )}
 
-    </PageWrapper>
-  );
+
+    localStorage.setItem(
+
+      "transactions",
+
+      JSON.stringify([
+
+        ...oldTransactions,
+
+        transaction
+
+      ])
+
+    );
+
+
+
+    setSuccess(true);
+
+
+
+    setTimeout(()=>{
+
+      navigate("/home");
+
+    },2500);
+
+
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    alert(
+      "Vote failed or rejected"
+    );
+
+  }
+
+
+
+  setLoading(false);
+
+};
+
+ return (
+
+<ElectionBackground>
+
+
+<PageWrapper>
+
+
+{success ?
+
+
+<div className="
+max-w-md mx-auto
+glass-card
+p-10
+text-center
+">
+
+
+<h2 className="
+text-3xl
+font-bold
+text-green-400
+">
+
+✅ Vote Submitted
+
+</h2>
+
+
+<p className="
+mt-4 text-gray-300
+">
+
+Your vote has been securely recorded on blockchain.
+
+</p>
+
+
+<div className="
+mt-6
+text-sm
+text-gray-400
+">
+
+Transaction Verified ⛓️
+
+</div>
+
+
+</div>
+
+
+
+:
+
+<div className="
+max-w-xl mx-auto
+">
+
+
+<div className="
+glass-card
+p-8
+">
+
+
+<h1 className="
+text-3xl
+font-bold
+text-center
+mb-8
+">
+
+🗳️ Confirm Your Vote
+
+</h1>
+
+
+
+<div className="
+bg-black/30
+rounded-xl
+p-4
+mb-6
+">
+
+
+<p className="text-gray-400">
+
+Voter Identification
+
+</p>
+
+
+<p className="
+text-green-400
+font-bold
+">
+
+{userNIN?.slice(0,4)}
+****
+{userNIN?.slice(-3)}
+
+</p>
+
+
+</div>
+
+
+
+
+
+<img
+
+src={candidate.image}
+
+alt={candidate.name}
+
+className="
+w-full
+h-64
+object-cover
+rounded-2xl
+mb-5
+
+"
+
+/>
+
+
+
+
+<div className="
+flex items-center gap-4
+mb-6
+">
+
+
+<img
+
+src={candidate.logo}
+
+alt={candidate.party}
+
+className="
+w-16 h-16
+rounded-full
+bg-white
+p-2
+
+"
+
+/>
+
+<div>
+
+
+<h2 className="
+text-2xl font-bold
+">
+
+{candidate.name}
+
+</h2>
+
+
+<p className="
+text-gray-400
+">
+
+{candidate.party}
+
+</p>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<div className="
+bg-yellow-900/40
+border
+border-yellow-500
+p-4
+rounded-xl
+mb-6
+">
+
+⚠️ Your vote cannot be changed after submission.
+
+</div>
+
+
+
+<div className="
+flex gap-4
+">
+
+
+<button
+
+onClick={()=>navigate("/")}
+
+className="
+flex-1
+bg-gray-700
+py-3
+rounded-xl
+"
+
+>
+
+Cancel
+
+</button>
+
+
+
+<button
+
+onClick={handleConfirmVote}
+
+disabled={loading}
+
+className="
+flex-1
+bg-green-600
+hover:bg-green-700
+py-3
+rounded-xl
+"
+
+>
+
+{
+loading
+?
+"Submitting..."
+:
+"Confirm Vote"
+}
+
+</button>
+
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+}
+
+
+</PageWrapper>
+
+
+</ElectionBackground>
+
+)
 }

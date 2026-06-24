@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ElectionBackground from "../components/ElectionBackground";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");
@@ -63,8 +64,20 @@ export default function AdminLoginPage() {
     setLoading(false);
   };
 
-  return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+ return (
+
+<ElectionBackground>
+
+
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+text-white
+px-4
+">
+
 
       {/* CARD */}
       <div className="w-full max-w-md glass-card p-8">
@@ -135,6 +148,9 @@ className="mt-4 text-green-500"
 
       </div>
 
-    </div>
-  );
+   </div>
+
+</ElectionBackground>
+
+);
 }

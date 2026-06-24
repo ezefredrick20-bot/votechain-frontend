@@ -13,7 +13,7 @@ import {
 import { useEffect, useState, useCallback } from "react";
 import Loader from "../components/Loader";
 import { useNavigate } from "react-router-dom";
-
+import DashboardCard from "../components/DashboardCard";
 
 export default function AdminDashboard() {
   const API = process.env.REACT_APP_API_URL;
@@ -262,24 +262,51 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
     </div>
 
     {/* 📊 SUMMARY */}
-    <div className="grid md:grid-cols-3 gap-6 mb-10">
-      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-        <p className="text-gray-400 text-sm">Total Users</p>
-        <h2 className="text-3xl font-bold mt-2">{users.length}</h2>
-      </div>
+    <div className="
+grid md:grid-cols-3
+gap-6
+mb-10
+">
 
-      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-        <p className="text-gray-400 text-sm">Total Votes</p>
-        <h2 className="text-3xl font-bold mt-2">{voters.length}</h2>
-      </div>
 
-      <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-        <p className="text-gray-400 text-sm">Candidates</p>
-        <h2 className="text-3xl font-bold mt-2">
-          {Object.keys(results).length}
-        </h2>
-      </div>
-    </div>
+<DashboardCard
+
+title="Registered Users"
+
+value={users.length}
+
+icon="👥"
+
+/>
+
+
+
+<DashboardCard
+
+title="Total Votes"
+
+value={voters.length}
+
+icon="🗳️"
+
+/>
+
+
+
+
+<DashboardCard
+
+title="Candidates"
+
+value={Object.keys(results).length}
+
+icon="🏛️"
+
+/>
+
+
+</div>
+      
 
     {/* 📊 RESULTS (POLISHED) */}
     <div className="bg-white/5 p-6 rounded-2xl border border-green-500/20 shadow-lg shadow-green-500/10 mb-8">
@@ -381,8 +408,8 @@ const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
             className="flex justify-between p-3 rounded-xl bg-white/5 border border-white/10 mb-2"
           >
             <span>
-              {v.nin.slice(0, 4)}****{v.nin.slice(-3)}
-            </span>
+{v.nin}
+</span>
             <span>{v.candidate}</span>
           </div>
         ))

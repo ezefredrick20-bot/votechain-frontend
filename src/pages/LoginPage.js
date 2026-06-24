@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ElectionBackground from "../components/ElectionBackground";
+
 
 export default function LoginPage() {
   const [nin, setNin] = useState("");
@@ -39,13 +41,42 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white px-4">
 
-      <div className="w-full max-w-md bg-white/5 border border-white/10 backdrop-blur-lg p-8 rounded-2xl shadow-xl">
+<ElectionBackground>
 
-        <h1 className="text-3xl font-bold text-center mb-2">
-          🏛️ VoteChain Portal
-        </h1>
+
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+text-white
+px-4
+">
+
+
+      <div className="
+w-full
+max-w-md
+bg-white/10
+backdrop-blur-xl
+border
+border-green-500/30
+p-10
+rounded-3xl
+shadow-2xl
+">
+
+
+
+        <h1 className="text-4xl font-bold text-green-400">
+⛓️ VoteChain
+</h1>
+
+
+<p>
+Blockchain Electoral Framework
+</p>
 
         <p className="text-gray-400 text-center mb-6">
           Secure Voter Login
@@ -89,6 +120,9 @@ export default function LoginPage() {
         </p>
 
       </div>
-    </div>
-  );
+   </div>
+
+</ElectionBackground>
+
+);
 }

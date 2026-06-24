@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PageWrapper from "../components/PageWrapper";
+import DashboardCard from "../components/DashboardCard";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -61,7 +62,63 @@ fetchTransactions();
       </div>
 
       {/* INFO SECTION */}
-      <div className="grid md:grid-cols-3 gap-6 mb-10">
+    {/* DASHBOARD SUMMARY */}
+
+<div className="
+grid md:grid-cols-3
+gap-6
+mb-10
+">
+
+
+<DashboardCard
+
+title="Voter ID"
+
+value={
+userNIN
+?
+userNIN.slice(0,4)+"****"
+:
+"Guest"
+}
+
+icon="👤"
+
+/>
+
+
+<DashboardCard
+
+title="Election Status"
+
+value={
+isOpen
+?
+"OPEN"
+:
+"CLOSED"
+}
+
+icon="🗳️"
+
+/>
+
+
+<DashboardCard
+
+title="Transactions"
+
+value={transactions.length}
+
+icon="⛓️"
+
+/>
+
+
+
+
+
 
         {/* USER */}
         <div className="bg-white/5 p-5 rounded-2xl border border-white/10">

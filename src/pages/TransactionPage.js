@@ -1,5 +1,6 @@
 import GlassCard from "../components/GlassCard";
 import {useEffect,useState} from "react";
+import ElectionBackground from "../components/ElectionBackground";
 export default function TransactionPage() {
 
 const [transactions,setTransactions]=useState([]);
@@ -31,7 +32,19 @@ fetchTransactions();
 },[]);
 
   return (
-    <div className="min-h-screen bg-slate-900 p-8">
+
+<ElectionBackground>
+
+
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+text-white
+px-4
+">
+
 
       <h1 className="text-3xl text-white font-bold text-center mb-8">
         ⛓️ Blockchain Transaction Viewer
@@ -106,5 +119,8 @@ fetchTransactions();
       </div>
 
     </div>
-  );
+
+</ElectionBackground>
+
+);
 }

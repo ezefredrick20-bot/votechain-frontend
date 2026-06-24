@@ -1,10 +1,23 @@
 import Navbar from "../components/Navbar";
 import TopBar from "../components/TopBar";
 import GlassCard from "../components/GlassCard";
+import ElectionBackground from "../components/ElectionBackground";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 text-gray-800">
+
+<ElectionBackground>
+
+
+<div className="
+min-h-screen
+flex
+items-center
+justify-center
+text-white
+px-4
+">
+
 
       {/* 🔝 INEC STYLE TOP BAR */}
       <TopBar />
@@ -82,5 +95,8 @@ export default function AboutPage() {
         © 2026 VoteChain — Powered for Secure Elections
       </div>
     </div>
-  );
+
+</ElectionBackground>
+
+);
 }
