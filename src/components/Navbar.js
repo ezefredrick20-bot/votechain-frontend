@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import {connectWallet} from "../utils/wallet";
 
 export default function Navbar() {
 
@@ -46,6 +47,34 @@ export default function Navbar() {
 
   }, []);
 
+const handleConnect = async()=>{
+
+
+try{
+
+
+const address = await connectWallet();
+
+
+localStorage.setItem(
+"wallet",
+address
+);
+
+
+window.location.reload();
+
+
+}
+
+catch(error){
+
+alert("Wallet connection failed");
+
+}
+
+
+};
 
   const active = (path) =>
     location.pathname === path
@@ -55,6 +84,7 @@ export default function Navbar() {
 
 
 return (
+
 
 <div className="bg-white shadow-sm border-b">
 
@@ -129,7 +159,17 @@ About
 
 
 
+<button
 
+onClick={handleConnect}
+
+className="bg-green-600 text-white px-3 py-2 rounded"
+
+>
+
+Connect Wallet
+
+</button>
 
 {/* USER INFO */}
 

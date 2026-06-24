@@ -1,5 +1,6 @@
 import GlassCard from "../components/GlassCard";
 import PageWrapper from "../components/PageWrapper";
+import {ethers} from "ethers";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -32,10 +33,18 @@ export default function ReviewVotePage() {
         return;
       }
 
-      await window.ethereum.request({
-        method: "personal_sign",
-        params: [`Vote for ${candidate.name}`, wallet],
-      });
+      const provider = new ethers.BrowserProvider(
+window.ethereum
+);
+
+
+const signer =
+await provider.getSigner();
+
+
+await signer.signMessage(
+`Vote for ${candidate.name}`
+);
 
       const res = await fetch(`${process.env.REACT_APP_API_URL}/vote`, {
         method: "POST",
