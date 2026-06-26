@@ -9,33 +9,26 @@ className="
 min-h-screen
 relative
 overflow-hidden
-bg-gradient-to-br
-from-green-950
-via-slate-950
-to-black
+bg-cover
+bg-center
 "
 
+style={{
+backgroundImage:
+"url('/voting-bg.png')"
+}}
 
 >
 
-
-{/* BACKGROUND EFFECT */}
 
 <div
 className="
 absolute
 inset-0
-opacity-20
-bg-[url('/voting-bg.png')]
-bg-cover
-bg-center
+bg-black/70
 "
-
 />
 
-
-
-{/* CONTENT */}
 
 <div className="relative z-10">
 
@@ -45,7 +38,6 @@ bg-center
 
 
 </div>
-
 
 );
 
