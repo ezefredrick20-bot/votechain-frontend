@@ -2,6 +2,7 @@ import candidates from "../data/candidates";
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { connectWallet } from "../utils/wallet";
 
 export default function VotingPage() {
   const [selected, setSelected] = useState(null);
@@ -28,28 +29,48 @@ export default function VotingPage() {
   }, []);
 
   // 🔗 Wallet connect
-  const connectWallet = async () => {
-    if (isConnecting) return;
+  const handleConnectWallet = async () => {
 
-    setIsConnecting(true);
+if(isConnecting) return;
 
-    if (window.ethereum) {
-      try {
-        const accounts = await window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
 
-        localStorage.setItem("wallet", accounts[0]);
-        alert("Wallet connected ✅");
-      } catch (error) {
-        alert(error.message);
-      }
-    } else {
-      alert("Install MetaMask");
-    }
+setIsConnecting(true);
 
-    setIsConnecting(false);
-  };
+
+try{
+
+
+const wallet = await connectWallet();
+
+
+localStorage.setItem(
+"wallet",
+wallet.address
+);
+
+
+alert(
+"Wallet connected ✅"
+);
+
+
+}
+catch(error){
+
+console.error(error);
+
+alert(
+"Wallet connection failed"
+);
+
+
+}
+
+
+setIsConnecting(false);
+
+
+};
 
   return (
     <>
@@ -82,7 +103,8 @@ export default function VotingPage() {
 
 <button
 
-onClick={connectWallet}
+onClick={handleConnectWallet}
+
 
 disabled={isConnecting}
 

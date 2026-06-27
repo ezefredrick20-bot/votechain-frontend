@@ -33,7 +33,13 @@ export default function ReviewVotePage() {
   const wallet =
 await connectWallet();
 
-console.log("Connected:", wallet);
+
+console.log(
+"Connected:",
+wallet.address
+);
+
+
 
 const provider =
 new ethers.BrowserProvider(

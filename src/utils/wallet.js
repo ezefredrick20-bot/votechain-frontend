@@ -11,11 +11,31 @@ try{
 
 provider = await EthereumProvider.init({
 
-projectId:"b705302ea88d7b3d502f2f5e2c6fe20b",
+projectId:
+"b705302ea88d7b3d502f2f5e2c6fe20b",
 
-chains:[1],
+chains:[
+11155111
+],
 
 showQrModal:true,
+
+
+metadata:{
+
+name:"VoteChain",
+
+description:
+"Secure Digital Voting Portal",
+
+url:
+"https://votechain-frontend-chi.vercel.app",
+
+icons:[
+"https://votechain-frontend-chi.vercel.app/logo.png"
+]
+
+}
 
 });
 
@@ -24,18 +44,27 @@ await provider.connect();
 
 
 
-const accounts = provider.accounts;
+const accounts =
+provider.accounts;
 
 
 
-return accounts[0];
+return {
+
+address:
+accounts[0],
+
+provider
+
+};
+
 
 
 }
 
 catch(error){
 
-console.log(error);
+console.error(error);
 
 throw error;
 
