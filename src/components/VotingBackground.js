@@ -1,6 +1,5 @@
 export default function VotingBackground({children}) {
 
-
 return (
 
 <div
@@ -9,23 +8,23 @@ className="
 min-h-screen
 relative
 overflow-hidden
-bg-cover
-bg-center
+bg-gradient-to-br
+from-green-950
+via-slate-950
+to-black
+text-white
 "
 
-style={{
-backgroundImage:
-"url('/voting-bg.png')"
-}}
-
 >
-
 
 <div
 className="
 absolute
 inset-0
-bg-black/70
+bg-gradient-to-r
+from-green-500/10
+via-transparent
+to-blue-500/10
 "
 />
 
@@ -40,6 +39,5 @@ bg-black/70
 </div>
 
 );
-
 
 }
