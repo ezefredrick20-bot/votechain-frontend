@@ -1,5 +1,5 @@
-import {connectWallet} from "./WalletConnect";
 import {useState} from "react";
+import {connectWallet} from "./WalletConnect";
 
 
 export default function ConnectWalletButton(){
@@ -7,18 +7,17 @@ export default function ConnectWalletButton(){
 const [walletAddress,setWalletAddress]=useState("");
 
 
-
 const handleConnect = async()=>{
 
 try{
 
-const wallet = await connectWallet();
+const address = await connectWallet();
 
-setWalletAddress(wallet.account);
+setWalletAddress(address);
 
 localStorage.setItem(
 "walletAddress",
-wallet.account
+address
 );
 
 
@@ -28,9 +27,7 @@ catch(error){
 
 console.error(error);
 
-alert(
-"Failed to connect wallet"
-);
+alert("Wallet connection failed");
 
 }
 
@@ -41,33 +38,61 @@ alert(
 
 return(
 
-<div>
+<div className="w-full">
+
 
 {
 walletAddress ?
 
-<div>
+
+<div className="
+bg-green-500/20
+border
+border-green-500
+rounded-xl
+p-4
+text-green-300
+break-all
+">
+
 Connected:
+
 {walletAddress}
 
+
 </div>
+
 
 :
 
 <button
+
 onClick={handleConnect}
+
+className="
+w-full
+bg-orange-500
+hover:bg-orange-600
+text-white
+py-3
+rounded-xl
+font-semibold
+"
+
 >
 
 Connect MetaMask Wallet
 
 </button>
 
+
 }
+
 
 </div>
 
 
-);
+)
 
 
 }

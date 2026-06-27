@@ -1,6 +1,5 @@
 export default function ElectionBackground({children}) {
 
-
 return (
 
 <div
@@ -14,21 +13,10 @@ text-white
 "
 >
 
-
-<div className="
-min-h-screen
-px-4
-py-6
-">
-
 {children}
 
 </div>
 
-
-</div>
-
 );
-
 
 }
