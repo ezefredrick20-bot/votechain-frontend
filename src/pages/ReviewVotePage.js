@@ -30,12 +30,13 @@ export default function ReviewVotePage() {
   try {
 
 
-    await connectWallet();
+  const wallet = await connectWallet();
 
-    const provider =
-      new ethers.BrowserProvider(
-        window.ethereum
-      );
+
+const provider =
+new ethers.BrowserProvider(
+wallet.provider
+);
 
 
     const signer =

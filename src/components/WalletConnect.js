@@ -7,23 +7,27 @@ const MMSDK = new MetaMaskSDK({
 
 dappMetadata:{
 name:"VoteChain",
-url:window.location.href
+url:window.location.origin
 }
 
 });
 
 
-const ethereum = MMSDK.getProvider();
+const provider = MMSDK.getProvider();
 
 
 const accounts =
-await ethereum.request({
+await provider.request({
 
 method:"eth_requestAccounts"
 
 });
 
 
-return accounts[0];
+return {
+account: accounts[0],
+provider
+};
+
 
 }
