@@ -11,9 +11,12 @@ export default function AboutPage() {
 
 <div className="
 min-h-screen
+w-full
+flex
+flex-col
 text-white
-px-4
 ">
+
 
 
       {/* 🔝 INEC STYLE TOP BAR */}
@@ -88,12 +91,25 @@ px-4
       </div>
 
       {/* FOOTER */}
-      <div className="bg-green-700 text-white text-center py-3 text-sm">
-        © 2026 VoteChain — Powered for Secure Elections
-      </div>
-    </div>
+     <footer
+className="
+w-full
+bg-green-700
+text-white
+text-center
+py-4
+"
+>
+
+© 2026 VoteChain — Powered for Secure Elections
+
+</footer>
+
+
+
+</div>
+
 
 </ElectionBackground>
-
 );
 }

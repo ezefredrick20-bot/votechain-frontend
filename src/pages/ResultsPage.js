@@ -1,5 +1,4 @@
 import { useEffect,useState } from "react";
-import PageWrapper from "../components/PageWrapper";
 import ElectionBackground from "../components/ElectionBackground";
 
 import {
@@ -62,7 +61,13 @@ return(
 <ElectionBackground>
 
 
-<PageWrapper>
+<div className="
+min-h-screen
+text-white
+px-4
+py-10
+">
+
 
 
 <div className="
@@ -247,7 +252,7 @@ fill="#22c55e"
 </div>
 
 
-</PageWrapper>
+</div>
 
 
 </ElectionBackground>

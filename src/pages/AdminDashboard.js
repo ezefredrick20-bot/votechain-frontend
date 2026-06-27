@@ -210,7 +210,16 @@ const toggleElection = async () => {
 const COLORS = ["#22c55e", "#3b82f6", "#f59e0b"];
 
  return (
-<div className="min-h-screen flex flex-col justify-between bg-gradient-to-br from-slate-950 via-slate-900 to-black text-white px-4 md:px-8 py-6">
+<div className="
+min-h-screen
+bg-gradient-to-br
+from-black
+via-green-950
+to-slate-950
+text-white
+px-4 md:px-8
+py-6
+">
     {/* 🔝 HEADER */}
     <div className="flex justify-between items-center mb-10">
       <div>

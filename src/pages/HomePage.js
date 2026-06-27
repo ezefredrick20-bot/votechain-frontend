@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import PageWrapper from "../components/PageWrapper";
 import DashboardCard from "../components/DashboardCard";
 
 export default function HomePage() {
@@ -48,7 +47,18 @@ fetchTransactions();
   }, []);
 
   return (
-    <PageWrapper>
+
+<div className="
+min-h-screen
+bg-gradient-to-br
+from-slate-950
+via-green-950
+to-black
+text-white
+px-4
+py-8
+">
+
 
       {/* HEADER */}
       <div className="text-center mb-10">
@@ -122,7 +132,7 @@ icon="⛓️"
           title="🗳️ Vote"
           desc="Cast your vote securely"
           color="bg-green-600 hover:bg-green-700"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/vote")}
         />
 
         <ActionCard
@@ -226,7 +236,7 @@ icon="⛓️"
         </p>
       </div>
 
-    </PageWrapper>
+    </div>
   );
 }
 

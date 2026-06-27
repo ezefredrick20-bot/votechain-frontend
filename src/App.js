@@ -37,10 +37,9 @@ useEffect(() => {
     <Route path="*" element={<NotFoundPage />} />
    <Route path="/admin-dashboard" element={<AdminDashboard />} />
     <Route path="/admin" element={<AdminPage />} />
-   <Route
-path="/"
-element={<VotingPage />}
-/>
+   <Route path="/" element={<LoginPage/>}/>
+<Route path="/home" element={<HomePage/>}/>
+<Route path="/vote" element={<VotingPage/>}/>
     <Route path="/about" element={<AboutPage />} />
 
   <Route
