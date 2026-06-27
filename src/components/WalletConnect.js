@@ -1,33 +1,20 @@
-import MetaMaskSDK from "@metamask/sdk";
-
-
 export async function connectWallet(){
 
-const MMSDK = new MetaMaskSDK({
+if(!window.ethereum){
 
-dappMetadata:{
-name:"VoteChain",
-url:window.location.origin
+throw new Error("MetaMask not installed");
+
 }
-
-});
-
-
-const provider = MMSDK.getProvider();
 
 
 const accounts =
-await provider.request({
+await window.ethereum.request({
 
 method:"eth_requestAccounts"
 
 });
 
 
-return {
-account: accounts[0],
-provider
-};
-
+return accounts[0];
 
 }

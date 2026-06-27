@@ -30,8 +30,10 @@ export default function ReviewVotePage() {
   try {
 
 
-  const wallet = await connectWallet();
+  const wallet =
+await connectWallet();
 
+console.log("Connected:", wallet);
 
 const provider =
 new ethers.BrowserProvider(
@@ -43,9 +45,12 @@ wallet.provider
       await provider.getSigner();
 
 
-    await signer.signMessage(
-      `Vote for ${candidate.name}`
-    );
+   const signature =
+await signer.signMessage(
+`VoteChain Vote Confirmation: ${candidate.name}`
+);
+
+console.log(signature);
 
 
     const res = await fetch(
