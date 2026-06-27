@@ -266,9 +266,7 @@ text-green-400
 font-bold
 ">
 
-{userNIN?.slice(0,4)}
-****
-{userNIN?.slice(-3)}
+{userNIN}
 
 </p>
 

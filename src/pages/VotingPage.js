@@ -78,15 +78,39 @@ export default function VotingPage() {
           </div>
 
           {/* 🔗 WALLET */}
-          <div className="flex justify-center mb-8">
-            <button
-              onClick={connectWallet}
-              disabled={isConnecting}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold"
-            >
-              {isConnecting ? "Connecting..." : "Connect Wallet"}
-            </button>
-          </div>
+     <div className="flex justify-center mb-8">
+
+<button
+
+onClick={connectWallet}
+
+disabled={isConnecting}
+
+className="
+bg-green-600
+hover:bg-green-700
+text-white
+px-6
+py-3
+rounded-xl
+font-semibold
+"
+
+>
+
+{
+isConnecting
+?
+"Connecting..."
+:
+"Connect Wallet"
+}
+
+
+</button>
+
+
+</div>
 
           {/* 🗳️ BALLOT GRID */}
           <div className="grid md:grid-cols-2 gap-6">

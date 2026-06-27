@@ -11,9 +11,6 @@ export default function AboutPage() {
 
 <div className="
 min-h-screen
-flex
-items-center
-justify-center
 text-white
 px-4
 ">
@@ -25,7 +22,7 @@ px-4
       {/* 🧭 NAVBAR */}
       <Navbar />
 
-      <div className="px-4 md:px-10 py-10 flex-1">
+      <div className="px-4 md:px-10 py-10">
 
         {/* HEADER */}
         <div className="text-center mb-12">

@@ -61,8 +61,7 @@ fetchTransactions();
         </p>
       </div>
 
-      {/* INFO SECTION */}
-    {/* DASHBOARD SUMMARY */}
+     {/* DASHBOARD SUMMARY */}
 
 <div className="
 grid md:grid-cols-3
@@ -72,20 +71,17 @@ mb-10
 
 
 <DashboardCard
-
-title="Voter ID"
-
+title="NIN"
 value={
 userNIN
 ?
-userNIN.slice(0,4)+"****"
+userNIN
 :
 "Guest"
 }
-
-icon="👤"
-
+icon="🪪"
 />
+
 
 
 <DashboardCard
@@ -105,6 +101,7 @@ icon="🗳️"
 />
 
 
+
 <DashboardCard
 
 title="Transactions"
@@ -116,48 +113,7 @@ icon="⛓️"
 />
 
 
-
-
-
-
-        {/* USER */}
-        <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-          <p className="text-gray-400 text-sm">
-            Logged in as
-          </p>
-
-          <p className="text-green-400 font-semibold mt-1 break-all">
-            {userNIN}
-          </p>
-        </div>
-
-        {/* ELECTION STATUS */}
-        <div className="bg-white/5 p-5 rounded-2xl border border-white/10 flex items-center justify-center">
-          <span
-            className={`px-5 py-2 rounded-full text-sm font-semibold ${
-              isOpen
-                ? "bg-green-600"
-                : "bg-red-600"
-            }`}
-          >
-            {isOpen
-              ? "🟢 Election Open"
-              : "🔴 Election Closed"}
-          </span>
-        </div>
-
-        {/* TRANSACTION COUNT */}
-        <div className="bg-white/5 p-5 rounded-2xl border border-white/10 text-center">
-          <p className="text-gray-400 text-sm">
-            Transactions
-          </p>
-
-          <p className="text-purple-400 text-2xl font-bold mt-1">
-            {transactions.length}
-          </p>
-        </div>
-
-      </div>
+</div>
 
       {/* ACTION GRID */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
