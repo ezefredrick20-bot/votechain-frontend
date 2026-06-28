@@ -9,42 +9,110 @@ export default function HomePage() {
 
   const userNIN = localStorage.getItem("userNIN");
 
-  const [transactions, setTransactions] = useState([]);
+  const [transactions,setTransactions]=useState([]);
+useEffect(()=>{
 
-useEffect(() => {
 
-const fetchTransactions = async()=>{
+const loadTransactions = async()=>{
+
 
 try{
 
-const res = await fetch(
-`${process.env.REACT_APP_API_URL}/transactions`
+
+const nin =
+localStorage.getItem("userNIN");
+
+
+if(!nin) return;
+
+
+
+const res =
+await fetch(
+`${process.env.REACT_APP_API_URL}/transactions/${nin}`
 );
 
-const data = await res.json();
+
+
+const data =
+await res.json();
+
+
 
 setTransactions(data);
 
-}catch(error){
 
-console.log(error);
+
+}
+catch(error){
+
+console.error(
+"Transaction loading error:",
+error
+);
+
 
 }
 
+
+
 };
 
-fetchTransactions();
+
+
+loadTransactions();
+
+
 
 },[]);
 
-  useEffect(() => {
-    const savedStatus =
-      localStorage.getItem("electionOpen");
+useEffect(()=>{
 
-    if (savedStatus !== null) {
-      setIsOpen(savedStatus === "true");
-    }
-  }, []);
+
+const loadElectionStatus = async()=>{
+
+
+try{
+
+
+const res =
+await fetch(
+`${process.env.REACT_APP_API_URL}/election-status`
+);
+
+
+
+const data =
+await res.json();
+
+
+
+setIsOpen(data.isOpen);
+
+
+
+}
+catch(error){
+
+console.error(
+"Election status error:",
+error
+);
+
+
+}
+
+
+
+};
+
+
+
+loadElectionStatus();
+
+
+
+},[]);
 
   return (
 

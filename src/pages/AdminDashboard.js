@@ -23,6 +23,50 @@ export default function AdminDashboard() {
   const [results, setResults] = useState({});
   const [isOpen, setIsOpen] = useState(true);
  const navigate = useNavigate();
+ const [transactions,setTransactions]=useState([]);
+
+ const fetchTransactions =
+useCallback(async()=>{
+
+
+try{
+
+
+const token =
+localStorage.getItem("adminToken");
+
+
+const res =
+await fetch(
+`${API}/admin/transactions`,
+{
+headers:{
+Authorization:
+`Bearer ${token}`
+}
+}
+);
+
+
+
+const data =
+await res.json();
+
+
+setTransactions(data);
+
+
+}
+
+catch(error){
+
+console.error(error);
+
+}
+
+
+},[API]);
+
 
 const fetchUsers = useCallback(async () => {
   setLoadingUsers(true);
@@ -143,13 +187,15 @@ useEffect(() => {
   fetchVoters();
   fetchResults();
   fetchElectionStatus();
+  fetchTransactions();
 
 }, [
   navigate,
   fetchUsers,
   fetchVoters,
   fetchResults,
-  fetchElectionStatus
+  fetchElectionStatus,
+  fetchTransactions
 ]);
 
 const toggleElection = async () => {
@@ -313,6 +359,15 @@ icon="🏛️"
 
 />
 
+<DashboardCard
+
+title="Transactions"
+
+value={transactions.length}
+
+icon="⛓️"
+
+/>
 
 </div>
       
@@ -424,6 +479,79 @@ icon="🏛️"
         ))
       )}
     </div>
+
+<div className="
+bg-white/5
+p-6
+rounded-2xl
+border
+border-white/10
+mb-8
+">
+
+
+<h2 className="text-2xl mb-4">
+
+⛓️ Blockchain Transactions
+
+</h2>
+
+
+
+{
+transactions.length===0
+
+?
+
+<p>
+No transactions
+</p>
+
+
+:
+
+transactions.map(tx=>(
+
+
+<div
+key={tx._id}
+className="
+p-4
+bg-white/5
+rounded-xl
+mb-3
+">
+
+
+<p>
+Candidate:
+{tx.candidate}
+</p>
+
+
+<p>
+Wallet:
+{tx.wallet}
+</p>
+
+
+<p className="text-green-400">
+
+{tx.hash}
+
+</p>
+
+
+</div>
+
+
+))
+
+}
+
+
+
+</div>
 
     {/* 👤 USERS */}
 <div className="bg-white/5 p-6 rounded-2xl border border-white/10">

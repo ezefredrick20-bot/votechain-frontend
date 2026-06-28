@@ -6,9 +6,11 @@ try{
 
 if(!window.ethereum){
 
+
 throw new Error(
-"MetaMask not installed"
+"Please install MetaMask or open this website inside MetaMask browser"
 );
+
 
 }
 
@@ -26,24 +28,44 @@ method:
 
 
 
-if(accounts.length === 0){
+if(!accounts || accounts.length === 0){
+
 
 throw new Error(
-"No wallet selected"
+"No wallet connected"
 );
+
 
 }
 
 
 
 
-return {
+
+const wallet = {
+
 
 address:accounts[0],
 
+
 provider:window.ethereum
 
+
 };
+
+
+
+
+
+localStorage.setItem(
+"wallet",
+accounts[0]
+);
+
+
+
+
+return wallet;
 
 
 
@@ -53,12 +75,14 @@ catch(error){
 
 
 console.error(
-"Wallet error:",
+"Wallet connection error:",
 error
 );
 
 
+
 throw error;
+
 
 
 }
@@ -76,6 +100,38 @@ export async function disconnectWallet(){
 localStorage.removeItem(
 "wallet"
 );
+
+
+if(window.ethereum){
+
+
+try{
+
+
+await window.ethereum.request({
+
+method:
+"wallet_revokePermissions",
+
+params:[
+{
+eth_accounts:{}
+}
+]
+
+});
+
+
+}
+catch(error){
+
+console.log(error);
+
+}
+
+
+}
+
 
 
 window.location.reload();

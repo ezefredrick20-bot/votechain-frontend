@@ -25,21 +25,17 @@ export default function ReviewVotePage() {
 
   if (!candidate) return null;
 
-  const handleConfirmVote = async () => {
-
-  setLoading(true);
-
-  try {
+  const handleConfirmVote = async()=>{
 
 
-  const wallet =
+setLoading(true);
+
+
+try{
+
+
+const wallet =
 await connectWallet();
-
-
-console.log(
-"Connected:",
-wallet.address
-);
 
 
 
@@ -49,89 +45,127 @@ wallet.provider
 );
 
 
-    const signer =
-      await provider.getSigner();
+
+const signer =
+await provider.getSigner();
 
 
-   const signature =
+
+const signature =
 await signer.signMessage(
-`VoteChain Vote Confirmation: ${candidate.name}`
+`VoteChain Vote Confirmation
+Candidate: ${candidate.name}
+NIN:${userNIN}`
 );
 
-console.log(signature);
 
 
-   const res = await fetch(
+const res =
+await fetch(
 `${process.env.REACT_APP_API_URL}/vote`,
 {
 
+
 method:"POST",
 
+
 headers:{
+
+
 "Content-Type":"application/json"
+
+
 },
 
 
 body:JSON.stringify({
 
+
 candidate:candidate.name,
+
 
 nin:userNIN,
 
+
 wallet:wallet.address,
+
 
 signature
 
 
+
 })
 
-});
 
-    const data = await res.json();
+}
 
-
-
-    if(!res.ok){
-
-      alert(data.error);
-
-      setLoading(false);
-
-      return;
-
-    }
+);
 
 
 
-    
-
-    setSuccess(true);
-
-
-
-    setTimeout(()=>{
-
-      navigate("/home");
-
-    },2500);
+const data =
+await res.json();
+console.log(
+"Blockchain Transaction:",
+data.transaction
+);
 
 
 
-  }
-
-  catch(err){
-
-    console.error(err);
-
-    alert(
-      "Vote failed or rejected"
-    );
-
-  }
+if(!res.ok){
 
 
+alert(data.error);
 
-  setLoading(false);
+
+return;
+
+
+}
+
+
+
+alert(
+"Vote submitted successfully"
+);
+
+
+
+setSuccess(true);
+
+
+
+setTimeout(()=>{
+
+
+navigate("/transactions");
+
+
+},2000);
+
+
+
+}
+
+
+catch(error){
+
+
+console.error(error);
+
+
+alert(
+"Wallet rejected or vote failed"
+);
+
+
+
+}
+
+
+
+setLoading(false);
+
 
 };
 

@@ -30,7 +30,9 @@ await res.json();
 
 
 
-setTransactions(data);
+setTransactions(
+data.reverse()
+);
 
 
 
@@ -83,7 +85,7 @@ px-4
           <div className="space-y-6">
 
             {transactions.map((tx, index) => (
-              <GlassCard key={index}>
+             <GlassCard key={tx._id}>
 
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl">
 
