@@ -7,27 +7,48 @@ const [transactions,setTransactions]=useState([]);
 
 useEffect(()=>{
 
+
 const fetchTransactions=async()=>{
+
 
 try{
 
-const res = await fetch(
-`${process.env.REACT_APP_API_URL}/transactions`
+
+const nin =
+localStorage.getItem("userNIN");
+
+
+const res =
+await fetch(
+`${process.env.REACT_APP_API_URL}/transactions/${nin}`
 );
 
-const data = await res.json();
+
+
+const data =
+await res.json();
+
+
 
 setTransactions(data);
 
-}catch(error){
+
+
+}
+
+catch(error){
 
 console.error(error);
 
 }
 
+
 };
 
+
 fetchTransactions();
+
+
 
 },[]);
 

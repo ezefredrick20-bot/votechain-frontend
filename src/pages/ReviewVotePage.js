@@ -1,8 +1,10 @@
 import PageWrapper from "../components/PageWrapper";
 import ElectionBackground from "../components/ElectionBackground";
 import {ethers} from "ethers";
-import {connectWallet}
-from "../components/WalletConnect";
+import {
+connectWallet
+}
+from "../utils/wallet";
 
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -59,26 +61,31 @@ await signer.signMessage(
 console.log(signature);
 
 
-    const res = await fetch(
-      `${process.env.REACT_APP_API_URL}/vote`,
-      {
-        method:"POST",
+   const res = await fetch(
+`${process.env.REACT_APP_API_URL}/vote`,
+{
 
-        headers:{
-          "Content-Type":"application/json"
-        },
+method:"POST",
 
-        body:JSON.stringify({
+headers:{
+"Content-Type":"application/json"
+},
 
-          candidate:candidate.name,
 
-          nin:userNIN,
+body:JSON.stringify({
 
-        }),
+candidate:candidate.name,
 
-      }
-    );
+nin:userNIN,
 
+wallet:wallet.address,
+
+signature
+
+
+})
+
+});
 
     const data = await res.json();
 
@@ -96,51 +103,7 @@ console.log(signature);
 
 
 
-    const transaction = {
-
-
-      hash:
-      "0x" +
-      Math.random()
-      .toString(16)
-      .substring(2,12),
-
-
-      candidate:candidate.name,
-
-
-      timestamp:
-      new Date().toISOString(),
-
-
-      status:"Confirmed"
-
-    };
-
-
-
-    const oldTransactions =
-    JSON.parse(
-      localStorage.getItem("transactions")
-    ) || [];
-
-
-
-    localStorage.setItem(
-
-      "transactions",
-
-      JSON.stringify([
-
-        ...oldTransactions,
-
-        transaction
-
-      ])
-
-    );
-
-
+    
 
     setSuccess(true);
 
