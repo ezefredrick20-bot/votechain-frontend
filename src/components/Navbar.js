@@ -21,8 +21,8 @@ useState(false);
 
 
 
-const wallet =
-localStorage.getItem("wallet");
+const [wallet,setWallet] =
+useState(null);
 
 
 const userNIN =
@@ -81,7 +81,81 @@ fetchElectionStatus();
 },[]);
 
 
+useEffect(()=>{
 
+
+const loadWallet = async()=>{
+
+
+try{
+
+
+const nin =
+localStorage.getItem("userNIN");
+
+
+
+if(!nin) return;
+
+
+
+const res =
+await fetch(
+
+`${process.env.REACT_APP_API_URL}/user/${nin}`
+
+);
+
+
+
+const data =
+await res.json();
+
+
+
+setWallet(
+data.wallet
+);
+
+
+
+if(data.wallet){
+
+
+localStorage.setItem(
+"wallet",
+data.wallet
+);
+
+
+}
+
+
+
+}
+
+catch(error){
+
+
+console.log(
+"Wallet loading error",
+error
+);
+
+
+}
+
+
+
+};
+
+
+
+loadWallet();
+
+
+
+},[]);
 
 
 

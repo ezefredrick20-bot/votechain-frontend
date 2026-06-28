@@ -8,7 +8,7 @@ if(!window.ethereum){
 
 
 throw new Error(
-"Please install MetaMask or open this website inside MetaMask browser"
+"Please open VoteChain inside MetaMask browser"
 );
 
 
@@ -20,19 +20,81 @@ throw new Error(
 const accounts =
 await window.ethereum.request({
 
-method:
-"eth_requestAccounts"
+method:"eth_requestAccounts"
 
 });
 
 
 
-
-if(!accounts || accounts.length === 0){
+if(!accounts.length){
 
 
 throw new Error(
 "No wallet connected"
+);
+
+}
+
+
+
+const address =
+accounts[0];
+
+
+
+// save locally
+
+localStorage.setItem(
+"wallet",
+address
+);
+
+
+
+
+
+// save to database
+
+const nin =
+localStorage.getItem("userNIN");
+
+
+
+if(nin){
+
+
+await fetch(
+
+`${process.env.REACT_APP_API_URL}/save-wallet`,
+
+{
+
+method:"POST",
+
+
+headers:{
+
+
+"Content-Type":"application/json"
+
+
+},
+
+
+body:JSON.stringify({
+
+
+nin,
+
+
+wallet:address
+
+
+})
+
+
+}
+
 );
 
 
@@ -41,11 +103,10 @@ throw new Error(
 
 
 
+return {
 
-const wallet = {
 
-
-address:accounts[0],
+address,
 
 
 provider:window.ethereum
@@ -55,28 +116,19 @@ provider:window.ethereum
 
 
 
-
-
-localStorage.setItem(
-"wallet",
-accounts[0]
-);
-
-
-
-
-return wallet;
-
-
-
 }
+
+
 
 catch(error){
 
 
 console.error(
+
 "Wallet connection error:",
+
 error
+
 );
 
 
@@ -88,7 +140,9 @@ throw error;
 }
 
 
+
 }
+
 
 
 
@@ -100,38 +154,6 @@ export async function disconnectWallet(){
 localStorage.removeItem(
 "wallet"
 );
-
-
-if(window.ethereum){
-
-
-try{
-
-
-await window.ethereum.request({
-
-method:
-"wallet_revokePermissions",
-
-params:[
-{
-eth_accounts:{}
-}
-]
-
-});
-
-
-}
-catch(error){
-
-console.log(error);
-
-}
-
-
-}
-
 
 
 window.location.reload();
