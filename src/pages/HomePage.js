@@ -8,6 +8,8 @@ export default function HomePage() {
   const [isOpen, setIsOpen] = useState(true);
 
   const userNIN = localStorage.getItem("userNIN");
+  const userFirstName =
+localStorage.getItem("userFirstName");
 
   const [transactions,setTransactions]=useState([]);
 useEffect(()=>{
@@ -129,7 +131,47 @@ py-8
 
 
       {/* HEADER */}
-      <div className="text-center mb-10">
+      {/* WELCOME MESSAGE */}
+
+<div className="
+mb-8
+bg-white/5
+border
+border-white/10
+rounded-2xl
+p-5
+max-w-md
+">
+
+<h2 className="
+text-2xl
+font-bold
+text-green-400
+">
+
+👋 Hello, {userFirstName || "Voter"}
+
+</h2>
+
+
+<p className="
+text-gray-400
+mt-2
+text-sm
+">
+
+Welcome back to VoteChain Secure Digital Voting Portal
+
+</p>
+
+
+</div>
+
+
+
+{/* HEADER */}
+
+<div className="text-center mb-10">
         <h1 className="text-3xl md:text-4xl font-bold">
           🏛️ VoteChain Dashboard
         </h1>

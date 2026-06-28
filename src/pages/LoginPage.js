@@ -30,6 +30,10 @@ export default function LoginPage() {
         alert(data.error);
       } else {
         localStorage.setItem("userNIN", data.user.nin);
+        localStorage.setItem(
+"userFirstName",
+data.user.firstName
+);
         navigate("/home");
       }
 
