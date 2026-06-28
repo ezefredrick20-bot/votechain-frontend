@@ -109,7 +109,9 @@ await res.json();
 
 
 
-setWallet(data.wallet);
+setWallet(
+data.wallet || null
+);
 
 
 
@@ -373,7 +375,9 @@ rounded
 "
 
 >
+
 Disconnect
+
 </button>
 
 }
