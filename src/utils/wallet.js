@@ -1,17 +1,13 @@
 export async function connectWallet(){
 
 
-try{
-
-
 if(!window.ethereum){
 
 throw new Error(
-"Open VoteChain inside MetaMask"
+"MetaMask not installed"
 );
 
 }
-
 
 
 const accounts =
@@ -22,15 +18,13 @@ method:"eth_requestAccounts"
 });
 
 
-
-const wallet =
+const address =
 accounts[0];
 
 
 
 const nin =
 localStorage.getItem("userNIN");
-
 
 
 
@@ -46,12 +40,11 @@ headers:{
 "Content-Type":"application/json"
 },
 
-
 body:JSON.stringify({
 
 nin,
 
-wallet
+wallet:address
 
 })
 
@@ -61,27 +54,20 @@ wallet
 
 
 
-
 localStorage.setItem(
 "wallet",
-wallet
+address
 );
 
 
 
-return wallet;
+return {
 
+address,
 
+provider:window.ethereum
 
-}
-
-catch(error){
-
-console.log(error);
-
-throw error;
-
-}
+};
 
 
 }

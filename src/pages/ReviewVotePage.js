@@ -150,18 +150,18 @@ navigate("/transactions");
 
 catch(error){
 
-
-console.error(error);
-
-
-alert(
-"Wallet rejected or vote failed"
+console.error(
+"FULL ERROR:",
+error
 );
 
 
+alert(
+error.message
+);
+
 
 }
-
 
 
 setLoading(false);
