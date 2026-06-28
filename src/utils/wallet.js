@@ -6,14 +6,11 @@ try{
 
 if(!window.ethereum){
 
-
 throw new Error(
-"Please open VoteChain inside MetaMask browser"
+"Open VoteChain inside MetaMask"
 );
 
-
 }
-
 
 
 
@@ -26,41 +23,13 @@ method:"eth_requestAccounts"
 
 
 
-if(!accounts.length){
-
-
-throw new Error(
-"No wallet connected"
-);
-
-}
-
-
-
-const address =
+const wallet =
 accounts[0];
 
-
-
-// save locally
-
-localStorage.setItem(
-"wallet",
-address
-);
-
-
-
-
-
-// save to database
 
 const nin =
 localStorage.getItem("userNIN");
 
-
-
-if(nin){
 
 
 await fetch(
@@ -71,71 +40,45 @@ await fetch(
 
 method:"POST",
 
-
 headers:{
-
 
 "Content-Type":"application/json"
 
-
 },
-
 
 body:JSON.stringify({
 
-
 nin,
 
-
-wallet:address
-
+wallet
 
 })
 
-
 }
 
 );
 
 
-}
+
+
+localStorage.setItem(
+"wallet",
+wallet
+);
 
 
 
-
-return {
-
-
-address,
-
-
-provider:window.ethereum
-
-
-};
+return wallet;
 
 
 
 }
-
-
 
 catch(error){
 
-
-console.error(
-
-"Wallet connection error:",
-
-error
-
-);
-
-
+console.error(error);
 
 throw error;
-
-
 
 }
 
@@ -151,12 +94,81 @@ throw error;
 export async function disconnectWallet(){
 
 
+try{
+
+
+const nin =
+localStorage.getItem("userNIN");
+
+
+
+if(!nin){
+
+throw new Error(
+"No user logged in"
+);
+
+}
+
+
+
+
+await fetch(
+
+`${process.env.REACT_APP_API_URL}/disconnect-wallet`,
+
+{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+nin
+
+})
+
+}
+
+);
+
+
+
+
+
 localStorage.removeItem(
 "wallet"
 );
 
 
+
+
 window.location.reload();
+
+
+
+}
+
+
+catch(error){
+
+
+console.error(
+
+"Disconnect error",
+
+error
+
+);
+
+
+}
+
 
 
 }

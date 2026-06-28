@@ -390,33 +390,26 @@ wallet &&
 
 <button
 
-onClick={disconnectWallet}
+onClick={async()=>{
+
+await disconnectWallet();
+
+setWallet(null);
+
+}}
 
 className="
-
 mt-2
-
 bg-red-600
-
 text-white
-
 px-3
-
 py-1
-
 rounded
-
 "
 
-
 >
-
-
 Disconnect
-
-
 </button>
-
 
 }
 
