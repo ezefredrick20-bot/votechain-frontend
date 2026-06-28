@@ -87,15 +87,11 @@ useEffect(()=>{
 const loadWallet = async()=>{
 
 
-try{
-
-
 const nin =
 localStorage.getItem("userNIN");
 
 
-
-if(!nin) return;
+if(!nin)return;
 
 
 
@@ -113,37 +109,7 @@ await res.json();
 
 
 
-setWallet(
-data.wallet
-);
-
-
-
-if(data.wallet){
-
-
-localStorage.setItem(
-"wallet",
-data.wallet
-);
-
-
-}
-
-
-
-}
-
-catch(error){
-
-
-console.log(
-"Wallet loading error",
-error
-);
-
-
-}
+setWallet(data.wallet);
 
 
 
@@ -156,7 +122,6 @@ loadWallet();
 
 
 },[]);
-
 
 
 const active=(path)=>

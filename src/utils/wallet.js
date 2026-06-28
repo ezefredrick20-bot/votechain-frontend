@@ -1,9 +1,6 @@
 export async function connectWallet(){
 
 
-try{
-
-
 if(!window.ethereum){
 
 throw new Error(
@@ -23,14 +20,27 @@ method:"eth_requestAccounts"
 
 
 
+if(!accounts.length){
+
+throw new Error(
+"No wallet selected"
+);
+
+}
+
+
+
 const wallet =
 accounts[0];
+
 
 
 const nin =
 localStorage.getItem("userNIN");
 
 
+
+// SAVE TO DATABASE
 
 await fetch(
 
@@ -41,9 +51,7 @@ await fetch(
 method:"POST",
 
 headers:{
-
 "Content-Type":"application/json"
-
 },
 
 body:JSON.stringify({
@@ -60,28 +68,7 @@ wallet
 
 
 
-
-localStorage.setItem(
-"wallet",
-wallet
-);
-
-
-
 return wallet;
-
-
-
-}
-
-catch(error){
-
-console.error(error);
-
-throw error;
-
-}
-
 
 
 }
@@ -94,24 +81,13 @@ throw error;
 export async function disconnectWallet(){
 
 
-try{
-
 
 const nin =
 localStorage.getItem("userNIN");
 
 
 
-if(!nin){
-
-throw new Error(
-"No user logged in"
-);
-
-}
-
-
-
+// REMOVE FROM DATABASE
 
 await fetch(
 
@@ -122,9 +98,7 @@ await fetch(
 method:"POST",
 
 headers:{
-
 "Content-Type":"application/json"
-
 },
 
 body:JSON.stringify({
@@ -139,7 +113,7 @@ nin
 
 
 
-
+// REMOVE LOCAL
 
 localStorage.removeItem(
 "wallet"
@@ -147,28 +121,7 @@ localStorage.removeItem(
 
 
 
-
 window.location.reload();
-
-
-
-}
-
-
-catch(error){
-
-
-console.error(
-
-"Disconnect error",
-
-error
-
-);
-
-
-}
-
 
 
 }
