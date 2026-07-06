@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export default function NotFoundPage() {
   const navigate = useNavigate();
@@ -9,12 +10,20 @@ export default function NotFoundPage() {
 
       <p className="text-xl mb-6">Page Not Found</p>
 
-      <button
+      <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
         onClick={() => navigate("/home")}
         className="bg-green-600 px-6 py-2 rounded"
       >
         Go Home
-      </button>
+      </motion.button>
     </div>
   );
 }

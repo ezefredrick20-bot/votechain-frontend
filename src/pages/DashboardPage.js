@@ -15,11 +15,14 @@ import { useEffect, useState } from "react";
 import ConnectWalletButton from "../components/ConnectWalletButton";
 import GlassCard from "../components/GlassCard";
 import Navbar from "../components/Navbar";
+import { motion } from "framer-motion";
+import SkeletonCard from "../components/SkeletonCard";
 
 export default function DashboardPage() {
   
    const [data, setData] = useState([]);
-  
+  const [loading,setLoading]=useState(true);
+
   const totalVotes = data.reduce(
   (sum, item) => sum + item.votes,
   0
@@ -33,15 +36,31 @@ export default function DashboardPage() {
 
   
 useEffect(() => {
-  fetch("https://votechain-backend-8m7f.onrender.com/results")
-    .then((res) => res.json())
-    .then((votes) => {
+  const loadResults = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/results`
+      );
+
+      const votes = await res.json();
+
       const formatted = Object.keys(votes).map((name) => ({
         name,
         votes: votes[name],
       }));
+
       setData(formatted);
-    });
+
+    } catch (error) {
+      console.error(error);
+
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadResults();
+
 }, []);
 
 const signature = localStorage.getItem("lastSignature");
@@ -49,7 +68,10 @@ const signature = localStorage.getItem("lastSignature");
  return (
    <>
           <Navbar />
-  <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6">
+  <motion.div
+initial={{ opacity:0, y:25 }}
+animate={{ opacity:1, y:0 }}
+transition={{ duration:0.5 }} className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6">
     <h1 className="text-4xl font-bold text-white text-center mb-8">
       Voter Dashboard
     </h1>
@@ -59,37 +81,69 @@ const signature = localStorage.getItem("lastSignature");
     </div>
 
 <div className="flex justify-center gap-4 mb-6">
-  <button
+  <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
     onClick={() => window.location.href = "/"}
     className="bg-blue-600 px-4 py-2 rounded-lg text-white"
   >
     Vote
-  </button>
+ </motion.button>
 
 
 
-  <button
+ <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
     onClick={() => window.location.href = "/about"}
     className="bg-gray-700 px-4 py-2 rounded-lg text-white"
   >
     About
-  </button>
+ </motion.button>
 
-  <button
+  <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
     onClick={() => window.location.href = "/admin-login"}
     className="bg-red-600 px-4 py-2 rounded-lg text-white"
   >
     Admin
-  </button>
+  </motion.button>
 </div>
 
 <div className="text-center mt-8">
-  <button
+  <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
     onClick={() => window.location.href = "/transactions"}
     className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold"
   >
     View Blockchain Transactions
-  </button>
+  </motion.button>
 </div>
 
     <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
@@ -126,7 +180,16 @@ const signature = localStorage.getItem("lastSignature");
     Election Results
   </h2>
 
-  <div className="h-72">
+  {
+
+loading ?
+
+<SkeletonCard rows={8}/>
+
+:
+
+<div className="h-72">
+
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={data} barSize={40}>
         <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
@@ -148,6 +211,7 @@ const signature = localStorage.getItem("lastSignature");
       </BarChart>
     </ResponsiveContainer>
   </div>
+}
 </GlassCard>
 
       <GlassCard>
@@ -155,7 +219,15 @@ const signature = localStorage.getItem("lastSignature");
           Vote Distribution
         </h2>
 
-        <div className="h-72">
+        {
+
+loading ?
+
+<SkeletonCard rows={8}/>
+
+:
+
+<div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -174,9 +246,11 @@ const signature = localStorage.getItem("lastSignature");
             </PieChart>
           </ResponsiveContainer>
         </div>
+}
+
       </GlassCard>
     </div>
-  </div>
+ </motion.div>
   </>
 );
 }

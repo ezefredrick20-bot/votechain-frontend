@@ -2,13 +2,14 @@ import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
-import AdminPage from "./pages/AdminPage";
 import LoginPage from "./pages/LoginPage";
 import TransactionPage from "./pages/TransactionPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import DashboardPage from "./pages/DashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AboutPage from "./pages/AboutPage";
+import LandingPage from "./pages/LandingPage";
+import { Toaster } from "react-hot-toast";
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { useState, useEffect } from "react";
 
@@ -27,8 +28,14 @@ useEffect(() => {
  
 
   return (
-    <Router>
-  <Routes>
+   <Router>
+
+<Toaster
+position="top-right"
+reverseOrder={false}
+/>
+
+<Routes>
     <Route path="/home" element={<HomePage />} />
     <Route path="/login" element={<LoginPage />} />
     <Route path="/register" element={<RegisterPage />} />
@@ -36,9 +43,7 @@ useEffect(() => {
     <Route path="/admin-login" element={<AdminLoginPage />} />
     <Route path="*" element={<NotFoundPage />} />
    <Route path="/admin-dashboard" element={<AdminDashboard />} />
-    <Route path="/admin" element={<AdminPage />} />
-   <Route path="/" element={<LoginPage/>}/>
-<Route path="/home" element={<HomePage/>}/>
+   <Route path="/" element={<LandingPage />} />
 <Route path="/vote" element={<VotingPage/>}/>
     <Route path="/about" element={<AboutPage />} />
 

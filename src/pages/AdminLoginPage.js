@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ElectionBackground from "../components/ElectionBackground";
+import toast from "react-hot-toast";
+import PageTransition from "../components/PageTransition";
+import { motion } from "framer-motion";
 
 export default function AdminLoginPage() {
   const [username, setUsername] = useState("");
@@ -15,7 +18,7 @@ export default function AdminLoginPage() {
   const handleAdminLogin = async () => {
 
     if (!username || !password) {
-      alert("Fill all fields");
+toast("Please complete all fields");
       return;
     }
 
@@ -41,14 +44,15 @@ export default function AdminLoginPage() {
 
       if (!res.ok) {
 
-        alert(data.error || "Login failed");
+        toast(data.error || "Login failed");
 
       } else {
 
         /* SAVE TOKEN */
         localStorage.setItem("adminToken", data.token);
 
-        alert("Admin login successful ✅");
+toast.success("Admin login successful ✅");
+
 
         navigate("/admin-dashboard");
       }
@@ -57,7 +61,7 @@ export default function AdminLoginPage() {
 
       console.log(error);
 
-      alert("Server error");
+     toast.error("Server Error");
 
     }
 
@@ -65,6 +69,8 @@ export default function AdminLoginPage() {
   };
 
  return (
+
+<PageTransition>
 
 <ElectionBackground>
 
@@ -89,12 +95,20 @@ px-4
             🔐 Admin Login
           </h1>
 
- <button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 onClick={()=>navigate("/home")}
 className="mt-4 text-green-500"
 >
 ← Back to Homepage
-</button>
+</motion.button>
 
 
           <p className="text-gray-400">
@@ -138,19 +152,29 @@ className="mt-4 text-green-500"
         </div>
 
         {/* BUTTON */}
-        <button
+       <motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
           onClick={handleAdminLogin}
           disabled={loading}
           className="primary-btn"
         >
           {loading ? "Logging in..." : "Login as Admin"}
-        </button>
-
+        </motion.button>
+        
       </div>
 
    </div>
 
 </ElectionBackground>
+
+</PageTransition>
 
 );
 }

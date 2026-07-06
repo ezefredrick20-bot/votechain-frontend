@@ -1,6 +1,7 @@
 import {useState} from "react";
 import {connectWallet} from "./WalletConnect";
-
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
 
 export default function ConnectWalletButton(){
 
@@ -27,7 +28,7 @@ catch(error){
 
 console.error(error);
 
-alert("Wallet connection failed");
+toast.error("Wallet connection failed");
 
 }
 
@@ -65,7 +66,15 @@ Connected:
 
 :
 
-<button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 
 onClick={handleConnect}
 
@@ -83,7 +92,7 @@ font-semibold
 
 Connect MetaMask Wallet
 
-</button>
+</motion.button>
 
 
 }

@@ -6,7 +6,8 @@ disconnectWallet
 }
 from "../utils/wallet";
 
-
+import NavbarClock from "../components/NavbarClock";
+import { motion } from "framer-motion";
 
 export default function Navbar() {
 
@@ -24,6 +25,8 @@ useState(false);
 const [wallet,setWallet] =
 useState(null);
 
+const [menuOpen,setMenuOpen]=
+useState(false);
 
 const userNIN =
 localStorage.getItem("userNIN");
@@ -145,6 +148,22 @@ location.pathname === path
 
 return(
 
+<>
+
+<div
+className="
+bg-green-900
+text-white
+text-center
+py-2
+text-sm
+tracking-wide
+"
+>
+
+Federal Republic of Nigeria • Blockchain Electoral Framework
+
+</div>
 
 <div className="bg-white shadow border-b">
 
@@ -158,32 +177,27 @@ return(
 {/* LOGO */}
 
 <div
-
 onClick={()=>navigate("/home")}
-
-className="flex items-center gap-2 cursor-pointer"
-
+className="flex items-center gap-3 cursor-pointer"
 >
 
-
 <img
-
 src={require("../assets/logo.png")}
-
 alt="logo"
-
-className="w-8 h-8"
-
+className="w-10 h-10"
 />
 
+<div>
 
-
-<h1 className="text-xl font-bold text-green-700">
+<h1 className="text-2xl font-bold text-green-700">
 
 VoteChain
 
 </h1>
 
+<NavbarClock />
+
+</div>
 
 </div>
 
@@ -199,7 +213,15 @@ VoteChain
 <div className="hidden md:flex gap-8 text-sm">
 
 
-<button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 
 onClick={()=>navigate("/home")}
 
@@ -209,11 +231,19 @@ className={active("/home")}
 
 Home
 
-</button>
+</motion.button>
 
 
 
-<button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 
 onClick={()=>navigate("/vote")}
 
@@ -223,11 +253,19 @@ className={active("/vote")}
 
 Vote
 
-</button>
+</motion.button>
 
 
 
-<button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 
 onClick={()=>navigate("/results")}
 
@@ -237,11 +275,19 @@ className={active("/results")}
 
 Results
 
-</button>
+</motion.button>
 
 
 
-<button
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
 
 onClick={()=>navigate("/about")}
 
@@ -251,7 +297,7 @@ className={active("/about")}
 
 About
 
-</button>
+</motion.button>
 
 
 
@@ -266,17 +312,81 @@ About
 
 {/* USER SECTION */}
 
+<div className="flex justify-end mb-2">
+
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
+className="
+text-2xl
+hover:scale-110
+duration-300
+"
+>
+
+🔔
+
+</motion.button>
+
+</div>
 
 <div className="text-xs text-right">
 
+<div className="flex justify-end mb-3">
 
-<p>
+<div
+className="
+w-12
+h-12
+rounded-full
+bg-green-600
+text-white
+font-bold
+flex
+items-center
+justify-center
+text-xl
+">
+
+{
+
+localStorage
+.getItem("userFirstName")
+?.charAt(0)
+.toUpperCase()
+
+}
+
+</div>
+
+</div>
+
+<p className="font-semibold text-green-700">
+
+Hello,
+
+{
+
+localStorage.getItem("userFirstName")
+
+}
+
+👋
+
+</p>
+
+<p className="text-xs">
 
 NIN:
 
 {
-userNIN || "Guest"
-
+userNIN
 }
 
 </p>
@@ -284,8 +394,22 @@ userNIN || "Guest"
 
 
 
-<p className="text-green-600">
+<div
+className="
+inline-flex
+items-center
+bg-green-100
+text-green-700
+px-3
+py-1
+rounded-full
+mt-2
+"
+>
 
+💳
+
+<span className="ml-2">
 
 {
 
@@ -293,17 +417,23 @@ wallet
 
 ?
 
-wallet.substring(0,6)+"..."
+wallet.substring(0,6)
+
++"..."
+
++
+
+wallet.slice(-4)
 
 :
 
 "No Wallet"
 
-
 }
 
+</span>
 
-</p>
+</div>
 
 
 
@@ -335,11 +465,11 @@ isOpen
 
 ?
 
-"Election Open"
+"🟢 Election Open"
 
 :
 
-"Election Closed"
+"🔴 Election Closed"
 
 
 }
@@ -351,37 +481,139 @@ isOpen
 
 
 
-{
+<div className="mt-3">
 
-wallet &&
+<motion.button
 
-<button
-
-onClick={async()=>{
-
-await disconnectWallet();
-
-setWallet(null);
-
+whileHover={{
+scale:1.05
 }}
 
+whileTap={{
+scale:0.95
+}}
+
+onClick={()=>setMenuOpen(!menuOpen)}
+
 className="
-mt-2
-bg-red-600
-text-white
+bg-gray-100
 px-3
-py-1
-rounded
+py-2
+rounded-lg
 "
 
 >
 
-Disconnect
+⚙ Account
 
-</button>
+</motion.button>
+
+{
+
+menuOpen &&
+
+<div
+className="
+mt-2
+bg-white
+shadow-lg
+rounded-xl
+overflow-hidden
+">
+
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
+
+onClick={disconnectWallet}
+
+className="
+block
+w-full
+text-left
+px-4
+py-2
+hover:bg-gray-100
+"
+
+>
+
+Disconnect Wallet
+
+</motion.button>
+
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
+
+onClick={()=>navigate("/transactions")}
+
+className="
+block
+w-full
+text-left
+px-4
+py-2
+hover:bg-gray-100
+"
+
+>
+
+Transaction History
+
+</motion.button>
+
+<motion.button
+
+whileHover={{
+scale:1.05
+}}
+
+whileTap={{
+scale:0.95
+}}
+
+onClick={()=>{
+
+localStorage.clear();
+
+navigate("/login");
+
+}}
+
+className="
+block
+w-full
+text-left
+px-4
+py-2
+text-red-600
+hover:bg-red-50
+"
+
+>
+
+Logout
+
+</motion.button>
+
+</div>
 
 }
 
+</div>
 
 
 
@@ -399,7 +631,7 @@ Disconnect
 
 </div>
 
-
+</>
 
 );
 
