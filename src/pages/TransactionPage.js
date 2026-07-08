@@ -16,16 +16,8 @@ const [transactions,setTransactions]=useState([]);
 const [search,setSearch] = useState("");
 
 const userNIN = localStorage.getItem("userNIN");
-const filteredTransactions =
-
-transactions.filter(tx =>
-
-tx.hash.toLowerCase().includes(
-
-search.toLowerCase()
-
-)
-
+const filteredTransactions = transactions.filter((tx) =>
+  (tx.hash || "").toLowerCase().includes(search.toLowerCase())
 );
 
 
@@ -156,13 +148,7 @@ Confirmed
 <p className="text-4xl font-bold text-blue-400 mt-3">
 
 {
-
-transactions.filter(
-
-tx=>tx.status==="Success"
-
-).length
-
+transactions.filter(tx => tx.status !== "Failed").length
 }
 
 </p>
@@ -257,29 +243,39 @@ Cast Vote
                 <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-6 rounded-2xl shadow-xl">
 
                   <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-white text-xl">
-                      Transaction #{index + 1}
-                    </h2>
+                    <h2 className="text-white text-xl font-bold">
 
-                  <span
+⛓ Blockchain Transaction
+
+</h2>
+
+                 <span
 className={`px-4 py-2 rounded-full text-sm font-bold
 
 ${
-tx.status==="Success"
-?
-"bg-green-600"
-:
-"bg-red-600"
+tx.status === "Failed"
+? "bg-red-600"
+
+: tx.status === "Pending"
+? "bg-yellow-500 text-black"
+
+: "bg-green-600"
+
 }`}
 
 >
 
 {
-tx.status==="Success"
-?
-"Confirmed"
-:
-"Failed"
+tx.status === "Failed"
+
+? "Failed"
+
+: tx.status === "Pending"
+
+? "Pending"
+
+: "Confirmed"
+
 }
 
 </span>
@@ -333,7 +329,13 @@ Wallet
 
 <p className="break-all">
 
-Ethereum Wallet
+{
+localStorage.getItem("wallet")
+?
+`${localStorage.getItem("wallet").slice(0,8)}...${localStorage.getItem("wallet").slice(-6)}`
+:
+"Not Connected"
+}
 
 </p>
 
@@ -349,7 +351,7 @@ Network
 
 <p>
 
-Ethereum Sepolia
+Sepolia Testnet
 
 </p>
 
@@ -365,7 +367,7 @@ Gas Fee
 
 <p>
 
-Estimated
+~0.00042 ETH
 
 </p>
 
@@ -388,49 +390,55 @@ Blockchain Timeline
 <div className="space-y-4">
 
 <div className="flex items-center gap-3">
-
 <div className="w-3 h-3 rounded-full bg-green-500"></div>
-
-<p>
-
-Vote Submitted
-
-</p>
-
+<p>Vote Submitted</p>
 </div>
 
 <div className="flex items-center gap-3">
-
 <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+<p>Wallet Signature Verified</p>
+</div>
+
+<div className="flex items-center gap-3">
+<div
+className={`w-3 h-3 rounded-full ${
+tx.status === "Confirmed"
+? "bg-purple-500"
+: "bg-yellow-500"
+}`}
+></div>
 
 <p>
-
-Digital Signature Verified
-
+{
+tx.status === "Confirmed"
+?
+"Transaction Recorded"
+:
+"Waiting for Confirmation"
+}
 </p>
 
 </div>
 
 <div className="flex items-center gap-3">
-
-<div className="w-3 h-3 rounded-full bg-purple-500"></div>
-
-<p>
-
-Transaction Added to Blockchain
-
-</p>
-
-</div>
-
-<div className="flex items-center gap-3">
-
-<div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+<div
+className={`w-3 h-3 rounded-full ${
+tx.status === "Confirmed"
+?
+"bg-green-500"
+:
+"bg-gray-500"
+}`}
+></div>
 
 <p>
-
-Confirmation Complete
-
+{
+tx.status === "Confirmed"
+?
+"Blockchain Confirmation Complete"
+:
+"Pending Confirmation"
+}
 </p>
 
 </div>
@@ -455,7 +463,7 @@ Confirmation Complete
                       </p>
 
                       <p className="text-white">
-                        {tx.timestamp}
+                       {new Date(tx.timestamp).toLocaleString()}
                       </p>
                     </div>
 
