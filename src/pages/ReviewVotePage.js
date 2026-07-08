@@ -21,6 +21,7 @@ localStorage.getItem("wallet") || ""
 
   const navigate = useNavigate();
   const location = useLocation();
+const [alreadyVoted, setAlreadyVoted] = useState(false);
 
   const candidate = location.state?.candidate;
   const userNIN = localStorage.getItem("userNIN");
@@ -36,9 +37,51 @@ localStorage.getItem("wallet") || ""
 
 setLoading(true);
 
+const checkVoteStatus = async () => {
 
 try{
 
+const res = await fetch(
+`${process.env.REACT_APP_API_URL}/transactions/${userNIN}`
+);
+
+const data = await res.json();
+
+if(data.length > 0){
+
+setAlreadyVoted(true);
+
+}
+
+}
+catch(error){
+
+console.log(error);
+
+}
+
+};
+
+checkVoteStatus();
+
+
+try{
+
+const checkVote = await fetch(
+`${process.env.REACT_APP_API_URL}/transactions/${userNIN}`
+);
+
+const previousVotes = await checkVote.json();
+
+if (previousVotes.length > 0) {
+
+toast.error("You have already voted.");
+
+setLoading(false);
+
+return;
+
+}
 
 const wallet =
 await connectWallet();
@@ -121,8 +164,11 @@ if (!res.ok) {
 
 setLoading(false);
 
-toast.error("data.error");
-
+toast.error(
+data.error ||
+data.message ||
+"Unable to submit vote."
+);
 
 return;
 
@@ -154,19 +200,17 @@ navigate("/transactions");
 
 catch(error){
 
-console.error(
-"FULL ERROR:",
-error
+console.error(error);
+
+toast.error(
+
+error.message ||
+
+"Something went wrong."
+
 );
-
-toast(
-
-error.message
-);
-
 
 }
-
 
 setLoading(false);
 
@@ -640,7 +684,7 @@ scale:0.95
 
 onClick={handleConfirmVote}
 
-disabled={loading}
+disabled={loading || alreadyVoted}
 
 className="
 flex-1
@@ -653,9 +697,16 @@ rounded-xl
 >
 
 {
+alreadyVoted
+?
+"Vote Already Cast"
+
+:
 loading
+
 ?
 "Submitting..."
+
 :
 "Confirm Vote"
 }
