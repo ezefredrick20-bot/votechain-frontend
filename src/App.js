@@ -1,5 +1,6 @@
 import HomePage from "./pages/HomePage";
 import RegisterPage from "./pages/RegisterPage";
+import ProfilePage from "./pages/ProfilePage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import LoginPage from "./pages/LoginPage";
@@ -38,6 +39,10 @@ reverseOrder={false}
 <Routes>
     <Route path="/home" element={<HomePage />} />
     <Route path="/login" element={<LoginPage />} />
+    <Route
+    path="/profile"
+    element={<ProfilePage />}
+/>
     <Route path="/register" element={<RegisterPage />} />
     <Route path="/transactions" element={<TransactionPage />} />
     <Route path="/admin-login" element={<AdminLoginPage />} />

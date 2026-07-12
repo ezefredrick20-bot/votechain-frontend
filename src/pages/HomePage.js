@@ -326,7 +326,7 @@ desc="View your information"
 
 color="bg-orange-600 hover:bg-orange-700"
 
-onClick={()=>navigate("/dashboard")}
+onClick={() => navigate("/profile")}
 
 />
 
@@ -342,20 +342,6 @@ onClick={()=>navigate("/about")}
 
 />
 
-<ActionCard
-
-title="🚪 Logout"
-
-desc="Exit securely"
-
-color="bg-red-600 hover:bg-red-700"
-
-onClick={()=>{
-localStorage.clear();
-navigate("/login");
-}}
-
-/>
 
 <DashboardCard
 
@@ -403,6 +389,13 @@ icon="💳"
           color="bg-purple-600 hover:bg-purple-700"
           onClick={() => navigate("/transactions")}
         />
+
+<ActionCard
+title="📈 Dashboard"
+desc="View election analytics"
+color="bg-cyan-600 hover:bg-cyan-700"
+onClick={() => navigate("/dashboard")}
+/>
 
       </div>
 

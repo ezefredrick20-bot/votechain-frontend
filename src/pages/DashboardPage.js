@@ -65,161 +65,114 @@ useEffect(() => {
 
 const signature = localStorage.getItem("lastSignature");
 
- return (
-   <>
-          <Navbar />
-  <motion.div
+return (
+<>
+<Navbar />
+
+<motion.div
 initial={{ opacity:0, y:25 }}
 animate={{ opacity:1, y:0 }}
-transition={{ duration:0.5 }} className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6">
-    <h1 className="text-4xl font-bold text-white text-center mb-8">
-      Voter Dashboard
-    </h1>
+transition={{ duration:0.5 }}
+className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-8"
+>
 
-    <div className="max-w-md mx-auto mb-8">
-      <ConnectWalletButton />
-    </div>
+<h1 className="text-5xl font-bold text-center text-white mb-3">
+📊 Election Analytics Dashboard
+</h1>
 
-<div className="flex justify-center gap-4 mb-6">
-  <motion.button
+<p className="text-center text-gray-400 mb-10">
+Real-time election statistics powered by VoteChain Blockchain
+</p>
 
-whileHover={{
-scale:1.05
-}}
-
-whileTap={{
-scale:0.95
-}}
-    onClick={() => window.location.href = "/"}
-    className="bg-blue-600 px-4 py-2 rounded-lg text-white"
-  >
-    Vote
- </motion.button>
-
-
-
- <motion.button
-
-whileHover={{
-scale:1.05
-}}
-
-whileTap={{
-scale:0.95
-}}
-    onClick={() => window.location.href = "/about"}
-    className="bg-gray-700 px-4 py-2 rounded-lg text-white"
-  >
-    About
- </motion.button>
-
-  <motion.button
-
-whileHover={{
-scale:1.05
-}}
-
-whileTap={{
-scale:0.95
-}}
-    onClick={() => window.location.href = "/admin-login"}
-    className="bg-red-600 px-4 py-2 rounded-lg text-white"
-  >
-    Admin
-  </motion.button>
+<div className="max-w-md mx-auto mb-8">
+<ConnectWalletButton />
 </div>
 
-<div className="text-center mt-8">
-  <motion.button
+<div className="grid md:grid-cols-4 gap-6 max-w-7xl mx-auto mb-10">
 
-whileHover={{
-scale:1.05
-}}
+<GlassCard>
 
-whileTap={{
-scale:0.95
-}}
-    onClick={() => window.location.href = "/transactions"}
-    className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-semibold"
-  >
-    View Blockchain Transactions
-  </motion.button>
-</div>
+<h3 className="text-gray-400 mb-2">
+Wallet Status
+</h3>
 
-    <div className="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
-      <GlassCard>
-        <h2 className="text-gray-400 mb-2">Wallet Address</h2>
-        <p className="text-green-400 break-all">
-          {localStorage.getItem("walletAddress") || "Not Connected"}
-        </p>
-      </GlassCard>
+<p className="text-green-400 font-bold">
 
-      <GlassCard>
-        <h2 className="text-gray-400 mb-2">Votes Cast</h2>
-        <p className="text-3xl font-bold text-white">{totalVotes}</p>
-      </GlassCard>
-
-      <GlassCard>
-        <h2 className="text-gray-400 mb-2">Last Transaction Hash</h2>
-        <p className="text-blue-400 break-all text-sm">
-          {localStorage.getItem("lastTransactionHash") || "No transaction yet"}
-        </p>
-      </GlassCard>
-
-      <GlassCard>
-        <h2 className="text-gray-400 mb-2">Last Signature</h2>
-        <p className="text-purple-400 break-all text-sm">
-          {signature || "No signature yet"}
-        </p>
-      </GlassCard>     
-    </div>
-
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-6xl mx-auto mt-8">
-      <GlassCard>
-  <h2 className="text-xl font-semibold text-white mb-4">
-    Election Results
-  </h2>
-
-  {
-
-loading ?
-
-<SkeletonCard rows={8}/>
-
+{
+localStorage.getItem("walletAddress")
+?
+"Connected"
 :
-
-<div className="h-72">
-
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} barSize={40}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-
-        <XAxis dataKey="name" stroke="#ffffff" />
-
-        <YAxis stroke="#ffffff" />
-
-        <Tooltip />
-
-        <Bar dataKey="votes">
-  <Cell fill="#22c55e" />
-  <Cell fill="#3b82f6" />
-  <Cell fill="#f59e0b" />
-</Bar>
-          radius={[10, 10, 0, 0]}
-          animationDuration={2000}
-        
-      </BarChart>
-    </ResponsiveContainer>
-  </div>
+"Not Connected"
 }
+
+</p>
+
 </GlassCard>
 
-      <GlassCard>
-        <h2 className="text-xl font-semibold text-white mb-4">
-          Vote Distribution
-        </h2>
+<GlassCard>
 
-        {
+<h3 className="text-gray-400 mb-2">
+Total Votes
+</h3>
+
+<p className="text-4xl font-bold text-white">
+
+{totalVotes}
+
+</p>
+
+</GlassCard>
+
+<GlassCard>
+
+<h3 className="text-gray-400 mb-2">
+Last Transaction
+</h3>
+
+<p className="text-blue-400 break-all text-xs">
+
+{
+localStorage.getItem("lastTransactionHash")
+||
+"No Transaction"
+}
+
+</p>
+
+</GlassCard>
+
+<GlassCard>
+
+<h3 className="text-gray-400 mb-2">
+Digital Signature
+</h3>
+
+<p className="text-purple-400 break-all text-xs">
+
+{
+signature
+||
+"No Signature"
+}
+
+</p>
+
+</GlassCard>
+
+</div>
+
+<div className="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+
+<GlassCard>
+
+<h2 className="text-2xl font-bold text-white mb-5">
+
+📈 Election Results
+
+</h2>
+
+{
 
 loading ?
 
@@ -227,30 +180,169 @@ loading ?
 
 :
 
-<div className="h-72">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={pieData}
-                dataKey="value"
-                nameKey="name"
-                outerRadius={90}
-                label
-              >
-                <Cell fill="#22c55e" />
-                <Cell fill="#3b82f6" />
-                <Cell fill="#f59e0b" />
-              </Pie>
+<div className="h-80">
 
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
+<ResponsiveContainer width="100%" height="100%">
+
+<BarChart data={data}>
+
+<CartesianGrid strokeDasharray="3 3"/>
+
+<XAxis dataKey="name"/>
+
+<YAxis/>
+
+<Tooltip/>
+
+<Bar
+dataKey="votes"
+radius={[8,8,0,0]}
+>
+
+<Cell fill="#22c55e"/>
+
+<Cell fill="#3b82f6"/>
+
+<Cell fill="#f59e0b"/>
+
+</Bar>
+
+</BarChart>
+
+</ResponsiveContainer>
+
+</div>
+
 }
 
-      </GlassCard>
-    </div>
- </motion.div>
-  </>
+</GlassCard>
+
+<GlassCard>
+
+<h2 className="text-2xl font-bold text-white mb-5">
+
+🥧 Vote Distribution
+
+</h2>
+
+{
+
+loading ?
+
+<SkeletonCard rows={8}/>
+
+:
+
+<div className="h-80">
+
+<ResponsiveContainer width="100%" height="100%">
+
+<PieChart>
+
+<Pie
+
+data={pieData}
+
+dataKey="value"
+
+nameKey="name"
+
+outerRadius={110}
+
+label
+
+>
+
+<Cell fill="#22c55e"/>
+
+<Cell fill="#3b82f6"/>
+
+<Cell fill="#f59e0b"/>
+
+</Pie>
+
+<Tooltip/>
+
+</PieChart>
+
+</ResponsiveContainer>
+
+</div>
+
+}
+
+</GlassCard>
+
+</div>
+
+<div className="max-w-7xl mx-auto mt-10">
+
+<GlassCard>
+
+<h2 className="text-2xl font-bold text-white mb-5">
+
+Blockchain Summary
+
+</h2>
+
+<div className="grid md:grid-cols-3 gap-6">
+
+<div>
+
+<p className="text-gray-400">
+
+Network
+
+</p>
+
+<h3 className="text-green-400 text-xl">
+
+Ethereum Sepolia
+
+</h3>
+
+</div>
+
+<div>
+
+<p className="text-gray-400">
+
+Security
+
+</p>
+
+<h3 className="text-green-400 text-xl">
+
+SHA-256 Hashing
+
+</h3>
+
+</div>
+
+<div>
+
+<p className="text-gray-400">
+
+Consensus
+
+</p>
+
+<h3 className="text-green-400 text-xl">
+
+Blockchain Verified
+
+</h3>
+
+</div>
+
+</div>
+
+</GlassCard>
+
+</div>
+
+</motion.div>
+
+</>
 );
 }
