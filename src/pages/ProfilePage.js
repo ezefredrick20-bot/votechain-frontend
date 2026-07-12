@@ -138,7 +138,7 @@ export default function ProfilePage() {
 
                         <button
 
-                            onClick={() => navigate("/")}
+                            onClick={() => navigate("/home")}
 
                             className="bg-green-600 hover:bg-green-700 px-8 py-3 rounded-xl text-white"
 
