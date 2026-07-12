@@ -2,6 +2,7 @@
   "name": "decentralized-voting",
   "version": "0.1.0",
   "private": true,
+
   "dependencies": {
     "@metamask/sdk": "^0.34.0",
     "@react-native-async-storage/async-storage": "^1.24.0",
@@ -21,18 +22,21 @@
     "web-vitals": "^2.1.4",
     "web3": "^4.16.0"
   },
+
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
+
   "browserslist": {
     "production": [
       ">0.2%",
@@ -45,6 +49,7 @@
       "last 1 safari version"
     ]
   },
+
   "devDependencies": {
     "autoprefixer": "^10.4.24",
     "eslint": "^8.57.0",
@@ -52,5 +57,10 @@
     "postcss": "^8.5.6",
     "react-refresh": "^0.18.0",
     "tailwindcss": "^3.4.19"
+  },
+
+  "overrides": {
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^5.1.0"
   }
 }
