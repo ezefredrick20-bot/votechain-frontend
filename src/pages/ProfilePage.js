@@ -80,7 +80,7 @@ export default function ProfilePage() {
 
                     <GlassCard>
 
-                        <div className="grid md:grid-cols-2 gap-8">
+                        <div className="grid md:grid-cols-2 gap-x-16 gap-y-10">
 
                             <ProfileItem
                                 title="First Name"
@@ -172,11 +172,17 @@ function ProfileItem({ title, value }) {
 
             </h2>
 
-            <p className="text-green-400 text-xl font-bold">
-
-                {value}
-
-            </p>
+           <p
+    className="
+        text-green-400
+        text-lg
+        font-bold
+        break-all
+        leading-relaxed
+    "
+>
+    {value}
+</p>
 
         </div>
 
